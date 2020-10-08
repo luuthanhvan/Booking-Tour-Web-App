@@ -1,12 +1,46 @@
+const mysql = require('mysql');
+const path = require('path');
 const express = require('express');
+const exphbs = require('express-handlebars');
 const dotenv = require('dotenv');
 dotenv.config();
+
+const route = require('./routes');
+
+/* Database connection */
+// const con = require('./config/db');
 
 const PORT = process.env.PORT;
 const HOST = process.env.HOSTNAME;
 
-
 const app = express();
-// console.log(app);
 
-app.listen(PORT, () => console.log(`Server running at http://${HOST}:${PORT}`));
+// Static files configuration
+app.use(express.static(path.join(__dirname, 'public')));
+
+/* Template engine */
+app.engine('.hbs', exphbs({
+    // handlebars config
+    extname: '.hbs',
+    layoutsDir: path.join(__dirname, 'resources/views/layouts'),
+    partialsDir: path.join(__dirname, 'resources/views/partials')
+}));
+app.set('view engine', '.hbs');
+// The views directory is in ./resource/views so we need to indicate the path to views directory
+app.set('views', path.join(__dirname, 'resources/views'));
+
+// connecting route to database
+// app.use(function(req, res, next) {
+//     req.con = con;
+//     // console.log(con);
+//     next();
+// });
+
+/* Parsing body request */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+/* Routing */
+route(app);
+
+app.listen(PORT, HOST, () => console.log(`Server running at http://${HOST}:${PORT}`));

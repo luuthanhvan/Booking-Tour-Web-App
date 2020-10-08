@@ -1,0 +1,45 @@
+<div class="container-2">
+    <div>
+        <form class="form" action="#" method="GET">
+            <div class="menu">
+                <ul>
+                    <li><a href="/manage/dest">Thêm địa điểm</a></li>
+                    <li><a href="/manage/editDest">Sửa địa điểm</a></li>
+                    <li><a href="/manage/deleteDest">Xóa địa điểm</a></li>
+                </ul>
+            </div>
+            <div id="destInfo">
+                <h3>Nhập thông tin địa điểm tham quan</h3>
+                <table>
+                    <tr>
+                         <td><label>Mã địa điểm</label></td>
+                        <td><input type="text" name="destId"/></td>
+                        <td><label>Mã tour</label></td>
+                        <td>
+                            <select>
+                                <option>Chọn mã tour</option>
+                                <option></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                         <td><label>Tên địa điểm</label></td>
+                        <td><input type="text" name="destName"/></td>
+                        <td><label>Hình ảnh</label></td>
+                        <td><input type="file" name="destImg" value="Chọn file"/></td>
+
+                    </tr>
+                    <tr>
+                        <td><label>Địa chỉ</label></td>
+                        <td><input type="text" name="destAddress"/></td>
+                    </tr>
+                    <tr>
+                        <td><label>Mô tả địa điểm</label></td>
+                        <td colspan="3"><textarea rows="8" cols="100" name="destDescription"></textarea></td>
+                    </tr>
+                    <tr><td><input type="submit" value="Thêm"/></td></tr>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>

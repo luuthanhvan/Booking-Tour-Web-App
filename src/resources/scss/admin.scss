@@ -1,0 +1,139 @@
+@import 'variables';
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body, html {
+    height: 100%;
+}
+
+#container-1{
+    width: 250px;
+    height: 100vh;
+    float: left;
+    background-color: #3e3e3e;
+}
+
+#container-1 h1{
+    text-align: center;
+    font-size: 36px;
+    color: white;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 2px #f36a5a;
+    background-color: #f36a5a;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+#container-1 table{
+    width: 252px;
+    margin-top: 10px;
+}
+
+#container-1 table td{
+    font-size: 22px;
+}
+
+#container-1 table a{
+    display: block;
+    text-decoration: none;
+    color: #F1F3CE;
+    padding: 10px;
+}
+
+#container-1 table td:hover, #container-1 table a:hover{
+    background-color: #ededed;
+    color: #f8918a;
+    font-weight: bold;
+}
+
+.material-icons {
+    float: left;
+    padding: 10px;
+}
+
+.container-2 {
+    background-color: #ededed;
+    width: calc(100% - 250px);
+    height: 100%;
+    float: right;
+    // border: 1px solid yellow;
+}
+
+.container-2 h2 {
+    // border: 1px solid yellow;
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+.form {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.menu{
+    background-color: white;
+    height: 45px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.menu ul{
+    list-style-type: none;
+    display: block;
+}
+
+.menu ul li{
+    float: left;
+	text-align: center;
+	font-size: 18px;
+    font-weight: bold;
+    height: 45px;
+    line-height: 45px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.menu a{
+    text-decoration: none;
+    display: block;
+    color: black;
+}
+
+.menu li:hover{
+    background-color: #ededed;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#tourInfo, #destInfo{
+    padding-left: 15px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+#tourInfo h3, #destInfo h3{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 22px;
+}
+
+#tourInfo table td, #destInfo table td{
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#tourInfo input, #destInfo input{
+    padding: 3px;
+    font-size: 16px;
+}
+
+#tourInfo textarea, #destInfo textarea{
+    padding: 10px;
+}

@@ -1,0 +1,73 @@
+<div class="container-2">
+    <div>
+        <form class="form" action="/manage/tour/add" method="POST">
+            <div class="menu">
+                <ul>
+                    <li><a href="/manage/tour">Thêm tour</a></li>
+                    <li><a href="/manage/editTour">Sửa tour</a></li>
+                    <li><a href="/manage/deleteTour">Xóa tour</a></li>
+                </ul>
+            </div>
+            <div id="tourInfo">
+                <h3>Nhập thông tin tour</h3>
+                <table>
+                    <tr>
+                        <td><label>Mã tour</label></td>
+                        <td><input type="text" name="tourId"/></td>
+                        <td><label>Tên tour</label></td>
+                        <td><input type="text" name="tourName"/></td>
+                    </tr>
+                    <tr>
+                        <td><label>Số lượng khách tối đa</label></td>
+                        <td><input type="text" name="maxCustomer"/></td>
+                        <td><label>Số lượng khách tối thiểu</label></td>
+                        <td><input type="text" name="minCustomer"/></td>
+                    </tr>
+                    <tr>
+                        <td><label>Thời gian đi</label></td>
+                        <td><input type="text" name="timeStart"/></td>
+                        <td><label>Thời gian về</label></td>
+                        <td><input type="text" name="timeEnd"/></td>
+                    </tr>
+                    <tr>
+                        <td><label>Giá tour</label></td>
+                        <td><input type="text" name="tourPrice"/></td>
+                        <td><label>Trạng thái</label></td>
+                        <td>
+                            <input type="radio" name="status" value="1" checked="checked"/> Hiện
+                            <input type="radio" name="status" value="0"/> Ẩn
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>Tỉ lệ giá vé dành cho</label></td>
+                        <td>
+                            <label>Người lớn</label>
+                            <input type="text"/> %
+                        </td>
+                        <td>
+                            <label>Trẻ em</label>
+                            <input type="text"/> %
+                        </td>
+                        <td>
+                            <label>Trẻ nhỏ</label>
+                            <input type="text"/> %
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>Địa điểm xuất phát</label></td>
+                        <td>
+                            <select>
+                                <option>Chọn địa điểm</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>Mô tả tour</label></td>
+                        <td colspan="3"><textarea rows="8" cols="100" name="tourDescription"></textarea></td>
+                    </tr>
+                    <tr><td><input type="submit" value="Thêm"/></td></tr>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
