@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="/css/admin.css">
+        <link href="/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/admin.css" rel="stylesheet">
         <title>{{title}}</title>
     </head>
     <body>
-        {{!-- {{> admin/header}} --}}
-        {{> admin/content}}
-        {{{body}}}
+        <div class="d-flex" id="wrapper">
+            {{> admin/sidebar}}
+            <div id="page-content-wrapper">
+                {{> admin/header}}
+                {{{body}}}
+            </div>
+        </div>
     </body>
 </html>
