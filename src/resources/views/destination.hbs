@@ -1,47 +1,77 @@
-<div class="container-2">
-    <div>
-        <form class="form" action="#" method="GET">
-            <div class="menu">
-                <ul>
-                    <li><a href="/manage/dest">Thêm địa điểm</a></li>
-                    <li><a href="/manage/editDest">Sửa địa điểm</a></li>
-                    <li><a href="/manage/deleteDest">Xóa địa điểm</a></li>
-                </ul>
+<div class="container-fluid">
+    <h3>Nhập thông tin địa điểm</h3>
+    <form action="/manage/dest" method="POST">
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label>Mã địa điểm</label>
+                <input type="text" class="form-control" name="destId" required>
             </div>
-            <div id="destInfo">
-                <h3>Nhập thông tin địa điểm tham quan</h3>
-                <table>
-                    <tr>
-                        <td><label>Mã địa điểm</label></td>
-                        <td><input type="text" name="destId"/></td>
-                        <td><label>Mã tour</label></td>
-                        <td>
-                            <select>
-                                <option>Chọn mã tour</option>
-                                <option></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                         <td><label>Tên địa điểm</label></td>
-                        <td><input type="text" name="destName"/></td>
-                        <td><label>Hình ảnh</label></td>
-                        <td><input type="file" name="destImg" value="Chọn file"/></td>
 
-                    </tr>
-                    <tr>
-                        <td><label>Địa chỉ</label></td>
-                        <td><input type="text" name="destAddress"/></td>
-                        <td><label>Địa điểm nổi bật</label></td>
-                        <td><input type="checkbox" name="destPopular"/></td>
-                    </tr>
-                    <tr>
-                        <td><label>Mô tả địa điểm</label></td>
-                        <td colspan="3"><textarea rows="8" cols="100" name="destDescription"></textarea></td>
-                    </tr>
-                    <tr><td><input type="submit" value="Thêm"/></td></tr>
-                </table>
+            <div class="col-md-6 mb-3">
+                <label>Tên địa điểm</label>
+                <input type="text" class="form-control" name="destName" required>
             </div>
-        </form>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <label>Địa chỉ</label>
+                <input type="text" class="form-control" name="destAddress" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" name="isDestPopular">
+                <label class="form-check-label">Địa điểm nổi bật</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Mô tả địa điểm</label>
+            <textarea class="form-control" name="destDescription" rows="10" required></textarea>
+        </div>
+        <div class="form-row">
+            <label>Hình ảnh</label>
+            <input type="file" class="form-control-file" name="destImg">
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-info" name="addDest" formaction="/manage/dest/add">Thêm</button>
+                <button class="btn btn-info" name="updateDest" formaction="/manage/dest/update">Cập nhật</button>
+                <button class="btn btn-info" name="editDest" formaction="/manage/dest/edit">Sửa</button>
+                <button class="btn btn-info" name="deleteDest" formaction="/manage/dest/delete">Xóa</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="dataGrid">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Mã tour</th>
+                    <th scope="col">Mã địa điểm</th>
+                    <th scope="col">Tên địa điểm</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">Địa điểm nổi bật</th>
+                    <th scope="col">Mô tả địa điểm</th>
+                    <th scope="col">Chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#if data.length}}
+                    <tr>
+                        {{#each data}}
+                            <th scope="row">empty</th>
+                            <td>{{this.dest_id}}</td>
+                            <td>{{this.dest_name}}</td>
+                            <td>{{this.dest_address}}</td>
+                            <td>{{this.is_popular}}</td>
+                            <td>{{this.dest_description}}</td>
+                            <td><input type="checkbox"/></td>
+                        {{/each}}
+                    </tr>
+                {{else}}
+                    <tr><td class="noData" colspan="7">Không có dữ liệu</td></tr>
+                {{/if}}
+            </tbody>
+        </table>
     </div>
 </div>

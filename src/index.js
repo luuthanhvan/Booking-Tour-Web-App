@@ -8,7 +8,7 @@ dotenv.config();
 const route = require('./routes');
 
 /* Database connection */
-// const con = require('./config/db');
+const con = require('./config/db');
 
 const PORT = process.env.PORT;
 const HOST = process.env.HOSTNAME;
@@ -29,16 +29,16 @@ app.set('view engine', '.hbs');
 // The views directory is in ./resource/views so we need to indicate the path to views directory
 app.set('views', path.join(__dirname, 'resources/views'));
 
-// connecting route to database
-// app.use(function(req, res, next) {
-//     req.con = con;
-//     // console.log(con);
-//     next();
-// });
-
 /* Parsing body request */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+/* Connecting route to database */
+app.use(function(req, res, next) {
+    req.con = con;
+    // console.log(con);
+    next();
+});
 
 /* Routing */
 route(app);

@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <h3>Nhập thông tin tour</h3>
-    <form action="/manage/tour">
+    <form action="/manage/tour" method="POST">
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label>Mã tour</label>
@@ -20,17 +20,32 @@
             <div class="col-md-3 mb-3">
                 <label>Số lượng khách tối đa</label>
                 <select class="custom-select" name="maxTourist" required>
-                  <option>25 người</option>
-                  <option>30 người</option>
-                  <option>35 người</option>
+                    <option value="25">25 người</option>
+                    <option value="30">30 người</option>
+                    <option value="35">35 người</option>
                 </select>
             </div>
             <div class="col-md-3 mb-3">
                 <label>Số lượng khách tối thiểu</label>
                 <select class="custom-select" name="minTourist" required>
-                    <option>20 người</option>
-                    <option>15 người</option>
+                    <option value="20">20 người</option>
+                    <option value="15">15 người</option>
                 </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">Trạng thái</div>
+            <div class="form-row">
+                <div class="col-sm-10">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="1" name="tourStatus" checked="checked">
+                        <label class="form-check-label">Hiện</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="0" name="tourStatus">
+                        <label class="form-check-label">Ẩn</label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-row">
@@ -49,8 +64,8 @@
             <div class="col">
                 <label>Địa điểm xuất phát</label>
                 <select class="custom-select" name="destStart" required>
-                    <option>...</option>
-                    <option>...</option>
+                    <option value="">...</option>
+                    <option value="">...</option>
                 </select>
             </div>
         </div>
@@ -58,54 +73,63 @@
             <div class="col">
                 <label>Địa điểm tham quan</label>
                 <select class="custom-select" name="touristDest" multiple required>
-                    <option>...</option>
-                    <option>...</option>
-                    <option>...</option>
-                    <option>...</option>
+                    <option value="">...</option>
+                    <option value="">...</option>
+                    <option value="">...</option>
+                    <option value="">...</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
             <label>Mô tả</label>
-            <textarea class="form-control" name="description" rows="10"></textarea>
+            <textarea class="form-control" name="tourDescription" rows="10" required></textarea>
         </div>
         <div class="d-flex justify-content-center">
             <div class="btn-group" role="group" aria-label="Basic example">
-                <input class="btn btn-info" type="submit" value="Thêm">
-                <input class="btn btn-info" type="submit" value="Xóa">
-                <input class="btn btn-info" type="submit" value="Sửa">
+                <button class="btn btn-info" name="addTour" formaction="/manage/tour/add">Thêm</button>
+                <button class="btn btn-info" name="updateTour" formaction="/manage/tour/update">Cập nhật</button>
+                <button class="btn btn-info" name="editTour" formaction="/manage/tour/edit">Sửa</button>
+                <button class="btn btn-info" name="deleteTour" formaction="/manage/tour/delete">Xóa</button>
             </div>
         </div>
     </form>
 
-    <table id="dataGrid" class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Mã tour</th>
-                <th scope="col">Tên tour</th>
-                <th scope="col">Giá tour</th>
-                <th scope="col">Ngày đi</th>
-                <th scope="col">Ngày về</th>
-                <th scope="col">Giờ khởi hành</th>
-                <th scope="col">Địa điểm xuất phát</th>
-                <th scope="col">Địa điểm tham quan</th>
-                <th scope="col">Mô tả</th>
-                <th scope="col">Chọn</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>data</td>
-                <td>data</td>
-                <td>data</td>
-                <td>data</td>
-                <td>data</td>
-                <td>data</td>
-                <td>data</td>
-                <td>data</td>
-                <td><input type="checkbox"/></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="dataGrid">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Mã tour</th>
+                    <th scope="col">Tên tour</th>
+                    <th scope="col">Giá tour</th>
+                    <th scope="col">Ngày đi</th>
+                    <th scope="col">Ngày về</th>
+                    <th scope="col">Giờ khởi hành</th>
+                    <th scope="col">Địa điểm xuất phát</th>
+                    <th scope="col">Địa điểm tham quan</th>
+                    <th scope="col">Mô tả</th>
+                    <th scope="col">Chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#if data.length}}
+                    <tr>
+                        {{#each data}}
+                            <th scope="row">{{this.tour_id}}</th>
+                            <td>{{this.tour_name}}</td>
+                            <td>{{this.tour_price}}</td>
+                            <td>empty</td>
+                            <td>empty</td>
+                            <td>empty</td>
+                            <td>empty</td>
+                            <td>empty</td>
+                            <td>{{this.tour_description}}</td>
+                            <td><input type="checkbox"/></td>
+                        {{/each}}
+                    </tr>
+                {{else}}
+                    <tr><td class="noData" colspan="10">Không có dữ liệu</td></tr>
+                {{/if}}
+            </tbody>
+        </table>
+    </div>
 </div>
