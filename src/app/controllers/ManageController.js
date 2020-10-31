@@ -1,23 +1,18 @@
 const manageModel = require('../models/ManageModel');
 
 class ManageController{
-    /* Function handler for Admin page */
+    /* Functions handler for Admin page */
     index(req, res){
         res.render('manage', {layout: 'admin_base_page', title: 'Admin'});
     }
 
-    /* Function handler for Tour page*/
+    /* Functions handler for Tour page */
     tour(req, res){
         const con = req.con;
-        manageModel.getTour(con, function(err, rows){
+        manageModel.getTour(con, function(err, rows, fields){
             if(err) throw err;
-            // console.log(rows);
-            if(rows.length == 0){
-                res.render('tour', {layout: 'admin_base_page', title: 'Tour', data: []});
-            }
-            else{
-                res.render('tour', {layout: 'admin_base_page', title: 'Tour', data: rows});
-            }
+            let tourInfo = rows.length == 0 ? [] : rows;
+            res.render('tour', {layout: 'admin_base_page', title: 'Tour', tourInfo});
         });
     }
 
@@ -30,28 +25,25 @@ class ManageController{
         });
     }
 
-    editTour(req, res){
-        res.render('editTour', {layout: 'admin_base_page', title: 'Sửa tour'});
+    deleteTourInfo(req, res){
+        const con = req.con;
+        const tours = req.query.id;
+        manageModel.deleteTour(con, tours, function(err){
+            if(err) throw err;
+            res.redirect('/manage/tour');
+        });
     }
 
-    deleteTour(req, res){
-        res.render('deleteTour', {layout: 'admin_base_page', title: 'Xóa tour'});
-    }
-
-    listTour(req, res){
-        res.render('tours', {layout: 'admin_base_page', title: 'Danh sách tour'});
-    }
-
-    /* Function handler for Tourist Destination page */
+    /* Functions handler for Tourist Destination page */
     dest(req, res){
         const con = req.con;
         manageModel.getDest(con, function(err, rows){
             if(err) throw err;
             if(rows.length == 0){
-                res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', data: []});
+                res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', destInfo: []});
             }
             else{
-                res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', data: rows});
+                res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', destInfo: rows});
             }
         });
     }
@@ -65,16 +57,13 @@ class ManageController{
         });
     }
 
-    editDest(req, res){
-        res.render('editDest', {layout: 'admin_base_page', title: 'Sửa địa điểm'});
-    }
-
-    deleteDest(req, res){
-        res.render('deleteDest', {layout: 'admin_base_page', title: 'Xóa địa điểm'});
-    }
-
-    listDest(req, res){
-        res.render('destinations', {layout: 'admin_base_page', title: 'Danh sách địa điểm tham quan'});
+    deleteDestInfo(req, res){
+        const con = req.con;
+        const dests = req.query.id;
+        manageModel.deleteDest(con, dests, function(err){
+            if(err) throw err;
+            res.redirect('/manage/dest');
+        });
     }
 }
 

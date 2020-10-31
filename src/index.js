@@ -18,6 +18,14 @@ const app = express();
 // Static files configuration
 app.use(express.static(path.join(__dirname, 'public')));
 
+/* Parsing body request */
+app.use(
+    express.urlencoded({
+        extended: true,
+    }),
+);
+app.use(express.json());
+
 /* Template engine */
 app.engine('.hbs', exphbs({
     // handlebars config
@@ -28,10 +36,6 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 // The views directory is in ./resource/views so we need to indicate the path to views directory
 app.set('views', path.join(__dirname, 'resources/views'));
-
-/* Parsing body request */
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 /* Connecting route to database */
 app.use(function(req, res, next) {

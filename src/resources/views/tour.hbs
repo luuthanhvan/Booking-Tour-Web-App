@@ -1,25 +1,29 @@
 <div class="container-fluid">
     <h3>Nhập thông tin tour</h3>
-    <form action="/manage/tour" method="POST">
+    <form method="POST">
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label>Mã tour</label>
-                <input type="text" class="form-control" name="tourId" required>
+                <input type="text" class="form-control" name="tourId">
             </div>
 
             <div class="col-md-6 mb-3">
                 <label>Tên tour</label>
-                <input type="text" class="form-control" name="tourName" required>
+                <input type="text" class="form-control" name="tourName">
             </div>
         </div>
         <div class="form-row">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-3 mb-3">
                 <label>Giá tour</label>
-                <input type="text" class="form-control" name="tourPrice" required>
+                <input type="text" class="form-control" name="tourPrice">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label>Phương tiện</label>
+                <input type="text" class="form-control" name="tourVehicle">
             </div>
             <div class="col-md-3 mb-3">
                 <label>Số lượng khách tối đa</label>
-                <select class="custom-select" name="maxTourist" required>
+                <select class="custom-select" name="maxTourist">
                     <option value="25">25 người</option>
                     <option value="30">30 người</option>
                     <option value="35">35 người</option>
@@ -27,7 +31,7 @@
             </div>
             <div class="col-md-3 mb-3">
                 <label>Số lượng khách tối thiểu</label>
-                <select class="custom-select" name="minTourist" required>
+                <select class="custom-select" name="minTourist">
                     <option value="20">20 người</option>
                     <option value="15">15 người</option>
                 </select>
@@ -50,20 +54,23 @@
         </div>
         <div class="form-row">
             <div class="col">
-                <label>Ngày đi</label>
-                <input type="text" class="form-control" name="dateGo" placeholder="dd/mm/yyyy" required>
+                <label>Ngày khởi hành</label>
+                <input type="text" class="form-control" name="dateGo" placeholder="dd/mm/yyyy">
             </div>
             <div class="col">
-                <label>Ngày về</label>
-                <input type="text" class="form-control" name="dateBack" placeholder="dd/mm/yyyy" required>
-            </div>
-            <div class="col">
-                <label>Giờ khởi hành</label>
-                <input type="text" class="form-control" name="timeGo" placeholder="hh:mm:ss" required>
+                <label>Thời gian</label>
+                <input type="text" class="form-control" name="time" placeholder="3 ngày 2 đêm">
             </div>
             <div class="col">
                 <label>Địa điểm xuất phát</label>
-                <select class="custom-select" name="destStart" required>
+                <select class="custom-select" name="destStart">
+                    <option value="">...</option>
+                    <option value="">...</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>Điểm đến</label>
+                <select class="custom-select" name="destEnd">
                     <option value="">...</option>
                     <option value="">...</option>
                 </select>
@@ -72,7 +79,7 @@
         <div class="form-row">
             <div class="col">
                 <label>Địa điểm tham quan</label>
-                <select class="custom-select" name="touristDest" multiple required>
+                <select class="custom-select" name="touristDest" multiple>
                     <option value="">...</option>
                     <option value="">...</option>
                     <option value="">...</option>
@@ -81,15 +88,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label>Mô tả</label>
-            <textarea class="form-control" name="tourDescription" rows="10" required></textarea>
+            <label>Chương trình Tour</label>
+            <textarea class="form-control" name="tourDescription" rows="10"></textarea>
         </div>
         <div class="d-flex justify-content-center">
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <button class="btn btn-info" name="addTour" formaction="/manage/tour/add">Thêm</button>
-                <button class="btn btn-info" name="updateTour" formaction="/manage/tour/update">Cập nhật</button>
-                <button class="btn btn-info" name="editTour" formaction="/manage/tour/edit">Sửa</button>
-                <button class="btn btn-info" name="deleteTour" formaction="/manage/tour/delete">Xóa</button>
+            <div class="btn-group" role="group">
+                <button class="btn btn-info" value="addTourAct" name="addTour" data-act='btnAddTour'>Thêm</button>
+                <button class="btn btn-info" value="updateTourAct" name="updateTour" data-act='btnUpdateTour'>Cập nhật</button>
+                <button class="btn btn-info" value="editTourAct" name="editTour" data-act='btnEditTour'>Sửa</button>
+                <button class="btn btn-info" value="deleteTourAct" name="deleteTour" data-act='btnDeleteTour'>Xóa</button>
             </div>
         </div>
     </form>
@@ -111,10 +118,10 @@
                 </tr>
             </thead>
             <tbody>
-                {{#if data.length}}
-                    <tr>
-                        {{#each data}}
-                            <th scope="row">{{this.tour_id}}</th>
+                {{#if tourInfo.length}}
+                    {{#each tourInfo}}
+                        <tr>
+                            <th id="th-tour-id" scope="row">{{this.tour_id}}</th>
                             <td>{{this.tour_name}}</td>
                             <td>{{this.tour_price}}</td>
                             <td>empty</td>
@@ -123,9 +130,9 @@
                             <td>empty</td>
                             <td>empty</td>
                             <td>{{this.tour_description}}</td>
-                            <td><input type="checkbox"/></td>
-                        {{/each}}
-                    </tr>
+                            <td><input class='chooseTour' name="tour" type="checkbox" value="{{this.tour_id}}"/></td>
+                        </tr>
+                    {{/each}}
                 {{else}}
                     <tr><td class="noData" colspan="10">Không có dữ liệu</td></tr>
                 {{/if}}
