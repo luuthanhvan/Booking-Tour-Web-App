@@ -39,19 +39,16 @@ class ManageController{
         const con = req.con;
         manageModel.getDest(con, function(err, rows){
             if(err) throw err;
-            if(rows.length == 0){
-                res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', destInfo: []});
-            }
-            else{
-                res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', destInfo: rows});
-            }
+            let destInfo = rows.length == 0 ? [] : rows;
+            res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', destInfo: rows});
         });
     }
 
     submitDestInfo(req, res){
         const con = req.con;
         const data = req.body;
-        manageModel.addDest(con, data, function(err){
+        const pathToImg = "/files_uploaded/"+req.file.filename;
+        manageModel.addDest(con, data, pathToImg, function(err){
             if(err) throw err;
             res.redirect('/manage/dest');
         });

@@ -23,8 +23,8 @@ class ManageModel{
         }
     }
 
-    addDest(con, data, callback){
-        let sql = "INSERT INTO tourist_destination VALUES ('"+data.destId+"', '"+data.destName+"', '"+data.destAddress+"', '"+data.destImg+"');";
+    addDest(con, data, path, callback){
+        let sql = "INSERT INTO tourist_destination VALUES ('"+data.destId+"', '"+data.destName+"', '"+data.destAddress+"', '"+path+"');";
         con.query(sql, callback);
     }
 

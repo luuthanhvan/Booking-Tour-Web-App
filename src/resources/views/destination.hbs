@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <h3>Nhập thông tin địa điểm</h3>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label>Mã địa điểm</label>
@@ -51,7 +51,7 @@
                             <th scope="row">{{this.dest_id}}</th>
                             <td>{{this.dest_name}}</td>
                             <td>{{this.dest_address}}</td>
-                            <td>{{this.dest_image}}</td>
+                            <td><img src="{{this.dest_image}}" alt="Đèo Ô Quy Hồ" class="imageStyle"></td>
                             <td><input class='chooseDest' name="dest" type="checkbox" value="{{this.dest_id}}"/></td>
                         </tr>
                     {{/each}}
