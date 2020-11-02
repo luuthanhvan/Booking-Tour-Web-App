@@ -9,10 +9,11 @@ class ManageController{
     /* Functions handler for Tour page */
     tour(req, res){
         const con = req.con;
-        manageModel.getTour(con, function(err, rows, fields){
+        manageModel.getTour(con, function(err, results, fields){
             if(err) throw err;
-            let tourInfo = rows.length == 0 ? [] : rows;
-            res.render('tour', {layout: 'admin_base_page', title: 'Tour', tourInfo});
+            let tourInfo = results[0].length == 0 ? [] : results[0];
+            let destInfo = results[1].length == 0 ? [] : results[1];
+            res.render('tour', {layout: 'admin_base_page', title: 'Tour', tourInfo, destInfo});
         });
     }
 
@@ -29,6 +30,27 @@ class ManageController{
         const con = req.con;
         const tours = req.query.id;
         manageModel.deleteTour(con, tours, function(err){
+            if(err) throw err;
+            res.redirect('/manage/tour');
+        });
+    }
+
+    editTourInfo(req, res){
+        const con = req.con;
+        const tourId = req.query.id;
+        manageModel.editTour(con, tourId, function(err, results){
+            if(err) throw err;
+            let tourInfo = results[0].length == 0 ? [] : results[0];
+            let destInfo = results[1].length == 0 ? [] : results[1];
+            res.render('editTour', {layout: 'admin_base_page', title: 'Chỉnh sửa Tour', tourInfo, destInfo});
+        });
+    }
+
+    updateTourInfo(req, res){
+        const con = req.con;
+        const data = req.body;
+        // console.log(data);
+        manageModel.updateTour(con, data, function(err){
             if(err) throw err;
             res.redirect('/manage/tour');
         });

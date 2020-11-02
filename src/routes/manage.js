@@ -6,6 +6,8 @@ const upload = require('../config/upload');
 router.get('/manage/tour', manageController.tour);
 router.post('/manage/tour/add', manageController.submitTourInfo);
 router.post('/manage/tour/delete', manageController.deleteTourInfo);
+router.post('/manage/tour/edit', manageController.editTourInfo);
+router.post('/manage/tour/update', manageController.updateTourInfo);
 
 router.get('/manage/dest', manageController.dest);
 router.post('/manage/dest/add', upload.single("destImg"), manageController.submitDestInfo);
