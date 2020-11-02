@@ -18,7 +18,7 @@ class ManageModel{
             let tours = data.split(",");
             tours[0] = tours[0].replace("'", "");
             tours[tours.length-1] = tours[tours.length-1].replace("'", "");
-            let sql = "DELETE from tour WHERE tour_id IN (?)";
+            let sql = "DELETE from tour WHERE tour_id IN (?);";
             con.query(sql, [tours], callback);
         }
     }
@@ -29,7 +29,7 @@ class ManageModel{
     }
 
     getDest(con, callback){
-        let sql = "SELECT * FROM tourist_destination";
+        let sql = "SELECT * FROM tourist_destination;";
         con.query(sql, callback);
     }
 
@@ -42,9 +42,19 @@ class ManageModel{
             let dests = data.split(",");
             dests[0] = dests[0].replace("'", "");
             dests[dests.length-1] = dests[dests.length-1].replace("'", "");
-            let sql = "DELETE from tourist_destination WHERE dest_id IN (?)";
+            let sql = "DELETE from tourist_destination WHERE dest_id IN (?);";
             con.query(sql, [dests], callback);
         }
+    }
+
+    editDest(con, destId, callback){
+        let sql = "SELECT * from tourist_destination WHERE dest_id='"+destId.slice(1,destId.length-1)+"';";
+        con.query(sql, callback);
+    }
+
+    updateDest(con, data, path, callback){
+        let sql = "UPDATE tourist_destination SET dest_name='"+data.destName+"', dest_address='"+data.destAddress+"', dest_image='"+path+"' WHERE dest_id='"+data.destId+"';";
+        con.query(sql, callback);
     }
 }
 

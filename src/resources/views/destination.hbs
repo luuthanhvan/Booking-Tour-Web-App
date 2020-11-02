@@ -26,7 +26,6 @@
         <div class="d-flex justify-content-center">
             <div class="btn-group" role="group">
                 <button class="btn btn-info" value="addDestAct" name="addDest" data-act='btnAddDest'>Thêm</button>
-                <button class="btn btn-info" value="updateDestAct" name="updateDest" data-act='btnUpdateDest'>Cập nhật</button>
                 <button class="btn btn-info" value="editDestAct" name="editDest" data-act='btnEditDest'>Sửa</button>
                 <button class="btn btn-info" value="deleteDestAct" name="deleteDest" data-act='btnDeleteDest'>Xóa</button>
             </div>
@@ -51,7 +50,7 @@
                             <th scope="row">{{this.dest_id}}</th>
                             <td>{{this.dest_name}}</td>
                             <td>{{this.dest_address}}</td>
-                            <td><img src="{{this.dest_image}}" alt="Đèo Ô Quy Hồ" class="imageStyle"></td>
+                            <td><img src="{{this.dest_image}}" alt="{{this.dest_image}}" class="imageStyle"></td>
                             <td><input class='chooseDest' name="dest" type="checkbox" value="{{this.dest_id}}"/></td>
                         </tr>
                     {{/each}}

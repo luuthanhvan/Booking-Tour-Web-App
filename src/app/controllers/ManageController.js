@@ -40,7 +40,7 @@ class ManageController{
         manageModel.getDest(con, function(err, rows){
             if(err) throw err;
             let destInfo = rows.length == 0 ? [] : rows;
-            res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', destInfo: rows});
+            res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', destInfo});
         });
     }
 
@@ -57,7 +57,34 @@ class ManageController{
     deleteDestInfo(req, res){
         const con = req.con;
         const dests = req.query.id;
-        manageModel.deleteDest(con, dests, function(err){
+        if(dests === "''"){
+            let message = "Bạn chưa chọn địa điểm cần xóa.";
+            res.send(message);
+        }
+        else{
+            manageModel.deleteDest(con, dests, function(err){
+                if(err) throw err;
+                res.redirect('/manage/dest');
+            });
+        }
+    }
+
+    editDestInfo(req, res){
+        const con = req.con;
+        const destId = req.query.id;
+        manageModel.editDest(con, destId, function(err, rows){
+            if(err) throw err;
+            let destInfo = rows.length == 0 ? [] : rows;
+            res.render('editDest', {layout: 'admin_base_page', title: 'Chỉnh sửa địa điểm tham quan', destInfo});
+        });
+    }
+
+    updateDestInfo(req, res){
+        const con = req.con;
+        const data = req.body;
+        // console.log(data);
+        const pathToImg = "/files_uploaded/"+req.file.filename;
+        manageModel.updateDest(con, data, pathToImg, function(err){
             if(err) throw err;
             res.redirect('/manage/dest');
         });
