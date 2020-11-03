@@ -9,6 +9,7 @@ class ManageModel{
 
     getTour(con, callback) {
         let sql = "SELECT * FROM tour;";
+        sql += "SELECT GROUP_CONCAT(dest_name SEPARATOR', ') as destinationName FROM tour, tour_details, tourist_destination WHERE tour.tour_id=tour_details.tour_id AND tour_details.dest_id=tourist_destination.dest_id GROUP BY tour.tour_id;";
         sql += "SELECT * from tourist_destination;";
         con.query(sql, callback);
     }

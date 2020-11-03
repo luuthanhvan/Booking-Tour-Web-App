@@ -12,7 +12,9 @@ class ManageController{
         manageModel.getTour(con, function(err, results, fields){
             if(err) throw err;
             let tourInfo = results[0].length == 0 ? [] : results[0];
-            let destInfo = results[1].length == 0 ? [] : results[1];
+            if(results[1].length != 0)
+                Object.assign(tourInfo[0], results[1][0]);
+            let destInfo = results[2].length == 0 ? [] : results[2];
             res.render('tour', {layout: 'admin_base_page', title: 'Tour', tourInfo, destInfo});
         });
     }
