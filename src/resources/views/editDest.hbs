@@ -1,37 +1,33 @@
 <div class="container-fluid">
-    {{#if destInfo.length}}
-        {{#each destInfo}}
-            <h3>Chỉnh sửa thông tin địa điểm</h3>
-            <form method="POST" enctype="multipart/form-data">
-                <div class="form-row">
-                    <div class="col-md-6 mb-3">
-                        <label>Mã địa điểm</label>
-                        <input type="text" class="form-control" name="destId" value="{{this.dest_id}}">
-                    </div>
+    {{#each destInfo}}
+        <h3>Chỉnh sửa thông tin địa điểm</h3>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label>Mã địa điểm</label>
+                    <input type="text" class="form-control" name="destId" value="{{this.dest_id}}">
+                </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label>Tên địa điểm</label>
-                        <input type="text" class="form-control" name="destName" value="{{this.dest_name}}">
-                    </div>
+                <div class="col-md-6 mb-3">
+                    <label>Tên địa điểm</label>
+                    <input type="text" class="form-control" name="destName" value="{{this.dest_name}}">
                 </div>
-                <div class="form-row">
-                    <div class="col">
-                        <label>Tỉnh/Thành phố</label>
-                        <input type="text" class="form-control" name="destAddress" value="{{this.dest_address}}">
-                    </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <label>Tỉnh/Thành phố</label>
+                    <input type="text" class="form-control" name="destAddress" value="{{this.dest_address}}">
                 </div>
-                <div class="form-row">
-                    <label>Hình ảnh</label>
-                    <input type="file" class="form-control-file" name="destImg">
+            </div>
+            <div class="form-row">
+                <label>Hình ảnh</label>
+                <input type="file" class="form-control-file" name="destImg">
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-info" value="updateDestAct" name="updateDest" data-act='btnUpdateDest'>Cập nhật</button>
                 </div>
-                <div class="d-flex justify-content-center">
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-info" value="updateDestAct" name="updateDest" data-act='btnUpdateDest'>Cập nhật</button>
-                    </div>
-                </div>
-            </form>
-        {{/each}}
-    {{else}}
-        <h1>Bạn chưa chọn Địa điểm cần chỉnh sửa.</h1>
-    {{/if}}
+            </div>
+        </form>
+    {{/each}}
 </div>

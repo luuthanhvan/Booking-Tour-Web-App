@@ -8,6 +8,7 @@ var buttonClick = container && container.addEventListener('click', (event) => {
     }
 });
 
+// get all tour id from checkbox (checked)
 var tours = [];
 var checkBoxsTour = document.querySelectorAll(".chooseTour");
 checkBoxsTour.forEach((item, i) => {
@@ -34,7 +35,7 @@ function deleteTour(e) {
     e.formAction = "/manage/tour/delete?id='"+tours+"'";
 }
 
-
+// get all dest id from checkbox (checked)
 var dests = [];
 var checkBoxsDest = document.querySelectorAll(".chooseDest");
 checkBoxsDest.forEach((item, i) => {

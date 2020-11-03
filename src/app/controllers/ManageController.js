@@ -7,20 +7,60 @@ class ManageController{
     }
 
     /* Functions handler for Tour page */
+    // get all tour and dest info and render tour page
     tour(req, res){
         const con = req.con;
         manageModel.getTour(con, function(err, results, fields){
             if(err) throw err;
-            let tourInfo = results[0].length == 0 ? [] : results[0];
-            if(results[1].length != 0)
-                Object.assign(tourInfo[0], results[1][0]);
-            let destInfo = results[2].length == 0 ? [] : results[2];
-            res.render('tour', {layout: 'admin_base_page', title: 'Tour', tourInfo, destInfo});
+            if(results[0].length == 0){
+                let message = "Chưa có địa điểm nào được nhập. Bạn cần nhập thông về địa điểm trước khi nhập thông tin tour.";
+                res.send(message);
+            }
+            else{
+                let destInfo = results[0];
+                // get tour info from the first sql statement
+                let tourInfo = results[1].length == 0 ? [] : results[1];
+                /* append { key: value } to [ RowDataPacket {
+                                                tour_id: 'tour1',
+                                                tour_name: 'Du lịch Hà Nội - Lào Cai',
+                                                tour_price: 7129000,
+                                                tour_vehicle: 'Máy bay',
+                                                tour_date_go: '5/11/2020',
+                                                tour_time: '3 ngày 2 đêm',
+                                                tour_dest_start: 'HG_001',
+                                                tour_dest_end: 'Hà Nội, Sa pa (Lào Cai)',
+                                                tour_max_customer: 25,
+                                                tour_min_customer: 20,
+                                                tour_description: 'abc',
+                                                tour_status: 1 }] */
+                if(results[2].length != 0)
+                    Object.assign(tourInfo[0], results[2][0]);
+                /* Result after append:
+                    [ RowDataPacket {
+                        tour_id: 'tour1',
+                        tour_name: 'Du lịch Hà Nội - Lào Cai',
+                        tour_price: 7129000,
+                        tour_vehicle: 'Máy bay',
+                        tour_date_go: '5/11/2020',
+                        tour_time: '3 ngày 2 đêm',
+                        tour_dest_start: 'HG_001',
+                        tour_dest_end: 'Hà Nội, Sa pa (Lào Cai)',
+                        tour_max_customer: 25,
+                        tour_min_customer: 20,
+                        tour_description: 'abc',
+                        tour_status: 1,
+                        destinationName: 'Hoàng Thành Thăng Long, Đèo Ô Quy Hồ' } ]
+                */
+                // get dest info from the first sql statement -> display dest name, address in select-option tag
+                // let destInfo = results[2].length == 0 ? [] : results[2];
+                res.render('tour', {layout: 'admin_base_page', title: 'Tour', tourInfo, destInfo});
+            }
         });
     }
 
     submitTourInfo(req, res){
         const con = req.con;
+        // get data from form and pass it to addTour()
         const data = req.body;
         manageModel.addTour(con, data, function(err){
             if(err) throw err;
@@ -30,22 +70,35 @@ class ManageController{
 
     deleteTourInfo(req, res){
         const con = req.con;
+        // get all tours id from checkbox (checked) and pass it to deleteTour()
         const tours = req.query.id;
-        manageModel.deleteTour(con, tours, function(err){
-            if(err) throw err;
-            res.redirect('/manage/tour');
-        });
+        if(tours === "''"){
+            let message = "Bạn chưa chọn tour cần xóa.";
+            res.send(message);
+        }
+        else{
+            manageModel.deleteTour(con, tours, function(err){
+                if(err) throw err;
+                res.redirect('/manage/tour');
+            });
+        }
     }
 
     editTourInfo(req, res){
         const con = req.con;
         const tourId = req.query.id;
-        manageModel.editTour(con, tourId, function(err, results){
-            if(err) throw err;
-            let tourInfo = results[0].length == 0 ? [] : results[0];
-            let destInfo = results[1].length == 0 ? [] : results[1];
-            res.render('editTour', {layout: 'admin_base_page', title: 'Chỉnh sửa Tour', tourInfo, destInfo});
-        });
+        if(tourId === "''"){
+            let message = "Bạn chưa chọn tour cần chỉnh sửa.";
+            res.send(message);
+        }
+        else{
+            manageModel.editTour(con, tourId, function(err, results){
+                if(err) throw err;
+                let tourInfo = results[0].length == 0 ? [] : results[0];
+                let destInfo = results[1].length == 0 ? [] : results[1];
+                res.render('editTour', {layout: 'admin_base_page', title: 'Chỉnh sửa Tour', tourInfo, destInfo});
+            });
+        }
     }
 
     updateTourInfo(req, res){
@@ -96,11 +149,17 @@ class ManageController{
     editDestInfo(req, res){
         const con = req.con;
         const destId = req.query.id;
-        manageModel.editDest(con, destId, function(err, rows){
-            if(err) throw err;
-            let destInfo = rows.length == 0 ? [] : rows;
-            res.render('editDest', {layout: 'admin_base_page', title: 'Chỉnh sửa địa điểm tham quan', destInfo});
-        });
+        if(destId === "''"){
+            let message = "Bạn chưa chọn địa điểm cần chỉnh sửa.";
+            res.send(message);
+        }
+        else{
+            manageModel.editDest(con, destId, function(err, rows){
+                if(err) throw err;
+                let destInfo = rows.length == 0 ? [] : rows;
+                res.render('editDest', {layout: 'admin_base_page', title: 'Chỉnh sửa địa điểm tham quan', destInfo});
+            });
+        }
     }
 
     updateDestInfo(req, res){

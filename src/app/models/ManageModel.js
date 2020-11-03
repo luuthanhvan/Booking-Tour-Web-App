@@ -1,6 +1,8 @@
 class ManageModel{
     addTour(con, data, callback) {
+        // data: got from form
         let sql = "INSERT INTO tour VALUES ('"+data.tourId+"', '"+data.tourName+"', '"+data.tourPrice+"', '"+data.tourVehicle+"', '"+data.dateGo+"', '"+data.time+"', '"+data.destStart+"', '"+data.destEnd.join(", ")+"', '"+data.maxTourist+"', '"+data.minTourist+"', '"+data.tourDescription+"', '"+data.tourStatus+"');";
+        // loop through touristDest array, get each dest id with tour id and insert into tour_details
         for(let i = 0; i < data.touristDest.length; i++){
             sql += "INSERT INTO tour_details VALUES ('"+data.touristDest[i]+"', '"+data.tourId+"');";
         }
@@ -8,19 +10,22 @@ class ManageModel{
     }
 
     getTour(con, callback) {
-        let sql = "SELECT * FROM tour;";
+        let sql = "SELECT * from tourist_destination;";
+        sql += "SELECT * FROM tour;";
         sql += "SELECT GROUP_CONCAT(dest_name SEPARATOR', ') as destinationName FROM tour, tour_details, tourist_destination WHERE tour.tour_id=tour_details.tour_id AND tour_details.dest_id=tourist_destination.dest_id GROUP BY tour.tour_id;";
-        sql += "SELECT * from tourist_destination;";
         con.query(sql, callback);
     }
 
     deleteTour(con, data, callback){
+        // if only one tour selected
         if(!data.includes(",")){
-            let sql =  "DELETE from tour_details WHERE tour_id='"+data.slice(1,data.length-1)+"';";
-            sql += "DELETE from tour WHERE tour_id='"+data.slice(1,data.length-1)+"';";
+            // data is a string like 'tour1' so I need remove ''
+            let tourId = data.slice(1,data.length-1);
+            let sql =  "DELETE from tour_details WHERE tour_id='"+tourId+"';";
+            sql += "DELETE from tour WHERE tour_id='"+tourId+"';";
             con.query(sql, callback);
         }
-        else{
+        else{ // multiple tours selected
             let tours = data.split(",");
             tours[0] = tours[0].replace("'", "");
             tours[tours.length-1] = tours[tours.length-1].replace("'", "");

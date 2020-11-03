@@ -2,7 +2,6 @@ const mysql = require('mysql');
 const path = require('path');
 const express = require('express');
 const exphbs = require('express-handlebars');
-// const upload = require('express-fileupload');
 const dotenv = require('dotenv');
 dotenv.config();
 
