@@ -1,0 +1,304 @@
+
+<!--Start Tour information part-->
+<div>
+    <div class="row">
+        <div class="col-md-4">
+            {{#each destInfo}}
+                <img src="{{this.dest_image}}" id="destImg"/>
+            {{/each}}
+        </div>
+        <div class="col-md-8">
+            {{#each tourInfo}}
+                <table class="table table-sm table-borderless tourInfoStyle">
+                    <thead>
+                        <tr><th colspan="2">{{this.tour_name}}</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Thời gian</th>
+                            <td>{{this.tour_time}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Khởi hành: </th>
+                            <td>{{this.tour_date_go}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Phương tiện: </th>
+                            <td>{{this.tour_vehicle}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Xuất phát: </th>
+                            <td>{{this.tour_dest_start}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Điểm đến: </th>
+                            <td>{{this.tour_dest_end}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Giá tour: </th>
+                            <td>{{this.tour_price}} VNĐ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {{/each}}
+        </div>
+    </div>
+</div>
+<!--End Tour information part-->
+
+<!--Start Tour price information part-->
+<div>
+    <h2>BẢNG GIÁ TOUR CHI TIẾT</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Người lớn (Từ 12 tuổi trở lên)</th>
+                <th scope="col">Trẻ em (Từ 5 tuổi đến dưới 12 tuổi)</th>
+                <th scope="col">Trẻ nhỏ (Từ 2 tuổi đến dưới 5 tuổi)</th>
+                <th scope="col">Em bé (Dưới 2 tuổi)</th>
+                <th scope="col">Phụ thu phòng đơn</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {{#each tourInfo}}
+                    <td id="adult"></td>
+                    <td id="child5to11"></td>
+                    <td id="child2to4"></td>
+                    <td id="childUnder2"></td>
+                    <td id="surcharge"></td>
+                    <script>
+                        let originalPrice = '{{this.tour_price}}';
+                        let surcharge = '{{this.tour_surcharge}}';
+                        // console.log(originalPrice);
+                        let child5to11Price = parseInt(originalPrice.split(".").join("")) * (75/100);
+                        child5to11Price = child5to11Price.toString().replace(/(?=(.{3})+$)/gm, ".");
+
+                        let child2to4Price = parseInt(originalPrice.split(".").join("")) * (50/100);
+                        child2to4Price = child2to4Price.toString().replace(/(?=(.{3})+$)/gm, ".");
+
+                        let childUnder2Price = parseInt(originalPrice.split(".").join("")) * (25/100);
+                        childUnder2Price = childUnder2Price.toString().replace(/(?=(.{3})+$)/gm, ".");
+
+                        document.getElementById("adult").innerHTML = originalPrice + " đ";
+                        document.getElementById("child5to11").innerHTML = child5to11Price + " đ";
+                        document.getElementById("child2to4").innerHTML = child2to4Price + " đ";
+                        document.getElementById("childUnder2").innerHTML = childUnder2Price + " đ";
+                        document.getElementById("surcharge").innerHTML = surcharge + " đ";
+                    </script>
+                {{/each}}
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!--End Tour price information part-->
+
+<!-- Start Customer information part-->
+<div>
+    <h2>THÔNG TIN KHÁCH HÀNG</h2>
+    <!--Start form-->
+	<form action="" method="post">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Giới tính</label>
+                    <select class="form-control" name="day">
+                        <option value="1">Nam</option>
+                        <option value="0">Nữ</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Địa chỉ</label>
+            <input type="text" class="form-control">
+        </div>
+
+        <div class="row">
+            <div class="col-md-9">
+                <fieldset class="form-group">
+                    <legend class="col-form-label pt-0">Ngày sinh</legend>
+                    <div class="row">
+                        <div class="col" id="selectDay"></div>
+                        <div class="col" id="selectMonth"></div>
+                        <div class="col" id="selectYear"></div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- handle display list of days, months, years -->
+            <script>
+                let optionsDay = "<select class='form-control' name='day'>";
+                optionsDay += "<option>Ngày</option>";
+                for(let day = 1; day <= 31; day++){
+                    optionsDay += `<option value=${day}>${day}</option>`;
+                }
+                optionsDay += "</select>";
+
+                let optionsMonth = "<select class='form-control' name='month'>";
+                optionsMonth += "<option>Tháng</option>";
+                for(let month = 1; month <= 12; month++){
+                    optionsMonth += `<option value=${month}>${month}</option>`;
+                }
+                optionsMonth += "</select>";
+
+                let currentYear = new Date().getFullYear(); // get the current year
+                let optionsYear = "<select class='form-control' name='year'>";
+                optionsYear += "<option>Năm</option>";
+                for(let year = currentYear; year >= currentYear-70; year--){
+                    optionsYear += `<option value=${year}>${year}</option>`;
+                }
+                optionsYear += "</select>";
+
+                document.getElementById("selectDay").innerHTML = optionsDay;
+                document.getElementById("selectMonth").innerHTML = optionsMonth;
+                document.getElementById("selectYear").innerHTML = optionsYear;
+            </script>
+
+            <div class="col">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label>Số lượng khách</label>
+                            <input type="text" class="form-control" id="nbCustomers" onchange="updateCustomers(this.value)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Ghi chú</label>
+            <textarea class="form-control" name="tourDescription" rows="3"></textarea>
+        </div>
+
+        <!-- handle show form -->
+        <script>
+            function updateCustomers(nbCustomers){
+                loadHtmlTable(nbCustomers);
+            }
+
+            function loadHtmlTable(nbCustomers){
+                let currentYear = new Date().getFullYear(); // get the current year
+                let tableHtml = "<h2>NHẬP THÔNG TIN DANH SÁCH KHÁCH HÀNG</h2>";
+
+                for(let i = 0; i < nbCustomers; i++){
+                    tableHtml += "<table class='table table-bordered'>";
+                    tableHtml += "<thead>";
+                    tableHtml += `<tr><th colspan='5' scope='col'>Khách hàng ${i+1} </th></tr>`;
+                    tableHtml += "</thead>";
+
+                    tableHtml += "<tbody>";
+                    tableHtml += "<tr>";
+
+                    tableHtml += "<td>";
+                    tableHtml += "<div class='form-group'>";
+                    tableHtml += "<label>Họ tên</label>";
+                    tableHtml += "<input type='text' class='form-control'>";
+                    tableHtml += "</div>";
+                    tableHtml += "</td>";
+
+                    tableHtml += "<td>";
+                    tableHtml += "<div class='form-group'>";
+                    tableHtml += "<label>Giới tính</label>";
+                    tableHtml += "<select class='form-control'>";
+                    tableHtml += "<option value='1'>Nam</option> <option value='0'>Nữ</option>";
+                    tableHtml += "</select>";
+                    tableHtml += "</div>";
+                    tableHtml += "</td>";
+
+
+                    tableHtml += "<td>";
+                    tableHtml += "<div class='form-group'>";
+                    tableHtml += "<label>Ngày sinh</label>";
+                    tableHtml += "<div class='row'>";
+                    tableHtml += "<div class='col'>";
+                    tableHtml += "<select class='form-control'>";
+                    tableHtml += "<option>Ngày</option>";
+                    for(let day = 1; day <= 31; day++){
+                        tableHtml += `<option value='${day}'>${day}</option>`
+                    }
+                    tableHtml += "</select>";
+                    tableHtml += "</div>";
+
+                    tableHtml += "<div class='col'>";
+                    tableHtml += "<select class='form-control'>";
+                    tableHtml += "<option>Tháng</option>";
+                    for(let month = 1; month <= 12; month++){
+                        tableHtml += `<option value='${month}'>${month}</option>`;
+                    }
+                    tableHtml += "</select>";
+                    tableHtml += "</div>";
+
+                    tableHtml += "<div class='col'>";
+                    tableHtml += "<select class='form-control'>";
+                    tableHtml += "<option>Năm</option>";
+                    for(let year = currentYear; year >= currentYear-70; year--){
+                        tableHtml += `<option value='${year}'>${year}</option>`;
+                    }
+                    tableHtml += "</select>";
+                    tableHtml += "</div>";
+
+                    tableHtml += "</div>";
+                    tableHtml += "</div>";
+                    tableHtml += "</td>";
+
+                    tableHtml += "<td>";
+                    tableHtml += "<div class='form-group'>";
+                    tableHtml += "<label>Độ tuổi</label>";
+                    tableHtml += "<select class='form-control'>";
+                    tableHtml += "<option>Người lớn</option>"
+                    tableHtml += "<option>Trẻ em</option>"
+                    tableHtml += "<option>Trẻ nhỏ</option>"
+                    tableHtml += "<option>Em bé</option>"
+                    tableHtml += "</select>";
+                    tableHtml += "</div>";
+                    tableHtml += "</td>";
+
+                    tableHtml += "<td>";
+                    tableHtml += "<div class='form-group'>";
+                    tableHtml += "<label>Phòng đơn</label>";
+                    tableHtml += "<select class='form-control'>";
+                    tableHtml += "<option value='1'>Có</option> <option value='0'>Không</option>"
+                    tableHtml += "</select>"
+                    tableHtml += "</div>";
+                    tableHtml += "</td>";
+
+                    tableHtml += "</tr>";
+
+                    tableHtml += "<tr><td colspan='5'>Trị giá: </td></tr>";
+                    tableHtml += "<tr><td colspan='5'>Tổng cộng: </td></tr>";
+                    tableHtml += "</tbody>";
+                    tableHtml += "</table>";
+                }
+
+                document.getElementById("listCustomers").innerHTML = tableHtml;
+            }
+        </script>
+        <!--Start list of Customers information part-->
+        <div id="listCustomers"></div>
+        <!--End list of Customers information part-->
+
+        <!-- Submit Button  -->
+		<div class="form-group row">
+			<div class="col-md-9">
+				<button type="submit" class="btn btn-primary btn-customized">Đặt tour</button>
+			</div>
+		</div>
+	</form>
+    <!--End form-->
+<div>
+<!--End Customer information part-->

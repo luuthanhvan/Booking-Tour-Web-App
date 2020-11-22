@@ -14,15 +14,22 @@
         </div>
 
         <div class="form-row">
-            <div class="col-md-3 mb-3">
+            <div class="col">
                 <label>Giá tour</label>
-                <input type="text" class="form-control" name="tourPrice">
+                <input type="text" class="form-control" name="tourPrice" placeholder="VNĐ">
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col">
+                <label>Phụ thu phòng đơn</label>
+                <input type="text" class="form-control" name="tourSurcharge" placeholder="VNĐ">
+            </div>
+            <div class="col">
                 <label>Phương tiện</label>
                 <input type="text" class="form-control" name="tourVehicle">
             </div>
-            <div class="col-md-3 mb-3">
+        </div>
+
+        <div class="form-group row">
+            <div class="col">
                 <label>Số lượng khách tối đa</label>
                 <select class="custom-select" name="maxTourist">
                     <option value="25">25 người</option>
@@ -30,19 +37,16 @@
                     <option value="35">35 người</option>
                 </select>
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col">
                 <label>Số lượng khách tối thiểu</label>
                 <select class="custom-select" name="minTourist">
                     <option value="20">20 người</option>
                     <option value="15">15 người</option>
                 </select>
             </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-sm-2">Trạng thái</div>
-            <div class="form-row">
-                <div class="col-sm-10">
+            <div class="col">
+                <label>Trạng thái</label>
+                <div class="form-row">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" value="1" name="tourStatus" checked="checked">
                         <label class="form-check-label">Hiện</label>
@@ -67,15 +71,15 @@
             <div class="col">
                 <label>Địa điểm xuất phát</label>
                 <select class="custom-select" name="destStart">
-                    {{#each destInfo}}
-                        <option value="{{this.dest_id}}">{{this.dest_address}}</option>
+                    {{#each destCity}}
+                        <option value="{{this.dest_address}}">{{this.dest_address}}</option>
                     {{/each}}
                 </select>
             </div>
             <div class="col">
                 <label>Điểm đến</label>
                 <select class="custom-select" name="destEnd[]" multiple>
-                    {{#each destInfo}}
+                    {{#each destCity}}
                         <option value="{{this.dest_address}}">{{this.dest_address}}</option>
                     {{/each}}
                 </select>
@@ -87,7 +91,7 @@
                 <label>Địa điểm tham quan</label>
                 <select class="custom-select" name="touristDest[]" multiple>
                     {{#each destInfo}}
-                        <option value="{{this.dest_id}}">{{this.dest_name}} - {{this.dest_address}}</option>
+                        <option value="{{this.dest_id}}">{{this.dest_name}}</option>
                     {{/each}}
                 </select>
             </div>
@@ -95,7 +99,7 @@
 
         <div class="form-group">
             <label>Chương trình Tour</label>
-            <textarea class="form-control" name="tourDescription" rows="10"></textarea>
+            <textarea id="summernote" name="tourDescription"></textarea>
         </div>
 
         <div class="d-flex justify-content-center">
@@ -108,12 +112,13 @@
     </form>
 
     <div class="dataGrid">
-        <table class="table table-bordered table-hover">
+        <table class="table table-sm table-bordered table-hover">
             <thead>
                 <tr>
                     <th scope="col">Mã tour</th>
                     <th scope="col">Tên tour</th>
                     <th scope="col">Giá tour</th>
+                    <th scope="col">Phụ thu phòng đơn</th>
                     <th scope="col">Phương tiện</th>
                     <th scope="col">Khởi hành</th>
                     <th scope="col">Thời gian</th>
@@ -133,6 +138,7 @@
                             <th id="th-tour-id" scope="row">{{this.tour_id}}</th>
                             <td>{{this.tour_name}}</td>
                             <td>{{this.tour_price}}</td>
+                            <td>{{this.tour_surcharge}}</td>
                             <td>{{this.tour_vehicle}}</td>
                             <td>{{this.tour_date_go}}</td>
                             <td>{{this.tour_time}}</td>
@@ -141,7 +147,16 @@
                             <td>{{this.destinationName}}</td>
                             <td>{{this.tour_max_customer}}</td>
                             <td>{{this.tour_min_customer}}</td>
-                            <td>{{this.tour_description}}</td>
+                            <td id="description"></td>
+                            <script>
+                                // data inserted from summernote to database is a string
+                                // so I need to convert plain text to html Object
+                                let plainText = '{{this.tour_description}}';
+                                let parser = new DOMParser();
+                                let htmlCode = parser.parseFromString(plainText, 'text/html');
+                                // console.log(htmlCode.body.outerText);
+                                document.getElementById('description').innerHTML = htmlCode.body.outerText;
+                            </script>
                             <td><input class='chooseTour' name="tour" type="checkbox" value="{{this.tour_id}}"/></td>
                         </tr>
                     {{/each}}

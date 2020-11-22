@@ -1,3 +1,89 @@
-<div>
-    <h1> Trang chủ </h1>
+<!-- Start slides -->
+<div id="slides" class="cover-slides">
+	<ul class="slides-container">
+		<li class="text-center">
+			<img src="/images/bg-2.jpeg" alt="">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1 class="m-b-20"><strong>Welcome To <br>Tour booking</strong></h1>
+						<!-- Input fields -->
+						<div class="input-group m-b-40">
+							<input name="searchTour" type="search" class="form-control form-control-lg rounded-pill" placeholder="Nhập địa điểm cần tìm kiếm"/>
+							<div>
+								<input id="btn-search" class="btn btn-lg btn-circle btn-outline-new-white rounded-pill" type="submit" value="Tìm kiếm">
+							</div>
+						</div>
+						<!-- End input fields -->
+					</div>
+				</div>
+			</div>
+		</li>
+		<li class="text-center">
+			<img src="/images/bg-3.jpg" alt="">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1 class="m-b-20"><strong>Welcome To <br>Tour booking</strong></h1>
+						<!-- Input fields -->
+						<div class="input-group m-b-40">
+							<input name="searchTour" type="search" class="form-control form-control-lg rounded-pill" placeholder="Nhập địa điểm cần tìm kiếm"/>
+							<div>
+								<input id="btn-search" class="btn btn-lg btn-circle btn-outline-new-white rounded-pill" type="submit" value="Tìm kiếm">
+							</div>
+						</div>
+						<!-- End input fields -->
+					</div>
+				</div>
+			</div>
+		</li>
+		<li class="text-center">
+			<img src="/images/bg-4.jpg" alt="">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1 class="m-b-20"><strong>Welcome To <br>Tour booking</strong></h1>
+						<!-- Input fields -->
+						<div class="input-group m-b-40">
+							<input name="searchTour" type="search" class="form-control form-control-lg rounded-pill" placeholder="Nhập địa điểm cần tìm kiếm"/>
+							<div>
+								<input id="btn-search" class="btn btn-lg btn-circle btn-outline-new-white rounded-pill" type="submit" value="Tìm kiếm">
+							</div>
+						</div>
+						<!-- End input fields -->
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
 </div>
+<!-- End slides -->
+
+<!-- Start Menu -->
+<div class="menu-box">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="heading-title text-center">
+					<h2>Danh sách Tour</h2>
+				</div>
+			</div>
+		</div>
+
+		<div class="row special-list">
+			{{#each tourInfo}}
+			<div class="col-lg-4 col-md-6 special-grid drinks">
+				<div class="gallery-single fix">
+					<img src="{{this.dest_image}}" class="img-fluid" alt="Image">
+					<div class="why-text">
+						<p>{{this.tour_name}}</p>
+						<h5>{{this.tour_price}} đ</h5>
+						<p><a class="btn btn-sm btn-circle btn-outline-new-white" href="/tourDetails?tourId='{{this.tour_id}}'">Chi tiết tour</a></p>
+					</div>
+				</div>
+			</div>
+			{{/each}}
+		</div>
+	</div>
+</div>
+<!-- End Menu -->

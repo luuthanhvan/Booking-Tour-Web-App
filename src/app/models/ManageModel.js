@@ -1,7 +1,7 @@
 class ManageModel{
     addTour(con, data, callback) {
         // data: got from form
-        let sql = "INSERT INTO tour VALUES ('"+data.tourId+"', '"+data.tourName+"', '"+data.tourPrice+"', '"+data.tourVehicle+"', '"+data.dateGo+"', '"+data.time+"', '"+data.destStart+"', '"+data.destEnd.join(", ")+"', '"+data.maxTourist+"', '"+data.minTourist+"', '"+data.tourDescription+"', '"+data.tourStatus+"');";
+        let sql = "INSERT INTO tour VALUES ('"+data.tourId+"', '"+data.tourName+"', '"+data.tourPrice+"', '"+data.tourSurcharge+"', '"+data.tourVehicle+"', '"+data.dateGo+"', '"+data.time+"', '"+data.destStart+"', '"+data.destEnd.join(", ")+"', '"+data.maxTourist+"', '"+data.minTourist+"', '"+data.tourDescription+"', '"+data.tourStatus+"');";
         // loop through touristDest array, get each dest id with tour id and insert into tour_details
         for(let i = 0; i < data.touristDest.length; i++){
             sql += "INSERT INTO tour_details VALUES ('"+data.touristDest[i]+"', '"+data.tourId+"');";
@@ -10,9 +10,12 @@ class ManageModel{
     }
 
     getTour(con, callback) {
-        let sql = "SELECT * from tourist_destination;";
+        let sql = "SELECT DISTINCT dest_address from tourist_destination;";
+        sql += "SELECT dest_id, dest_name from tourist_destination;";
         sql += "SELECT * FROM tour;";
-        sql += "SELECT GROUP_CONCAT(dest_name SEPARATOR', ') as destinationName FROM tour, tour_details, tourist_destination WHERE tour.tour_id=tour_details.tour_id AND tour_details.dest_id=tourist_destination.dest_id GROUP BY tour.tour_id;";
+        sql += "SELECT GROUP_CONCAT(dest_name SEPARATOR', ') as destinationName FROM tour, tour_details, tourist_destination " +
+                "WHERE tour.tour_id=tour_details.tour_id AND tour_details.dest_id=tourist_destination.dest_id GROUP BY tour.tour_id;";
+
         con.query(sql, callback);
     }
 

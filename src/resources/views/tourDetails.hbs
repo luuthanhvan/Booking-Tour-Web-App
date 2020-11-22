@@ -1,0 +1,69 @@
+{{#each tourInfo}}
+    <h1>{{this.tour_name}}</h1>
+{{/each}}
+<div class="row">
+    <!-- Start auto slide show -->
+    <div class="col-6 slideshow-container">
+        {{#each destInfo}}
+            <div class="destImageSlideshow fade">
+                <img src="{{this.dest_image}}"/>
+                <div class="caption">{{this.dest_name}}</div>
+            </div>
+        {{/each}}
+    </div>
+    <!-- End auto slide show -->
+    {{#each tourInfo}}
+    <div class="col-6">
+        <table class="table tourInfoStyle">
+            <tbody>
+                <tr>
+                    <th scope="row">Thời gian: </th>
+                    <td>{{this.tour_time}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Khởi hành: </th>
+                    <td>{{this.tour_date_go}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Phương tiện: </th>
+                    <td>{{this.tour_vehicle}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Xuất phát: </th>
+                    <td>{{this.tour_dest_start}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Điểm đến: </th>
+                    <td>{{this.tour_dest_end}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Giá tour: </th>
+                    <td>{{this.tour_price}} đ</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {{/each}}
+</div>
+{{#each tourInfo}}
+    <div>
+        <h1>Chương trình Tour</h1>
+        <div id="tourDescription"></div>
+        <script>
+            // data inserted from summernote to database is a string
+            // so I need to convert plain text to html Object
+            let plainText = '{{this.tour_description}}';
+            let parser = new DOMParser();
+            let htmlCode = parser.parseFromString(plainText, 'text/html');
+            // console.log(htmlCode.body.outerText);
+            document.getElementById('tourDescription').innerHTML = htmlCode.body.outerText;
+        </script>
+    </div>
+    <button type="button" class="btn btn-info" id="btn-booking">Đặt ngay</button>
+    <script>
+        // handling onclick event button
+        document.getElementById("btn-booking").onclick = function () {
+            location.href = "/booking?tourId='{{this.tour_id}}'";
+        };
+    </script>
+{{/each}}
