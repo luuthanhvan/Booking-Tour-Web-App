@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col">
+        <h1>Hóa đơn đặt tour</h1>
+    </div>
+</div>
+
+<div>
+    <p>Ngày: {{date}}</p>
+    <p>Giờ: {{time}}</p>
+    {{#each tourInfo}}
+    <p>Tên tour: {{this.tour_name}}</p>
+    {{/each}}
+</div>
+
+<div>
+    <table class="table table-sm table-borderless tableCustom">
+        <thead>
+            <tr><th scope="col" colspan="2">Thông tin khách hàng</th></tr>
+        </thead>
+        <tbody>
+        {{#each mainCustomerInfo}}
+            <tr>
+                <th scope="col">Khách hàng:</th>
+                <td>{{this.customer_name}}</td>
+            </tr>
+            <tr>
+                <th scope="col">Địa chỉ:</th>
+                <td>{{this.customer_address}}</td>
+            </tr>
+            <tr>
+                <th scope="col">Số điện thoại:</th>
+                <td>{{this.customer_phone}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<h3>Danh sách khách hàng</h3>
+<div>
+    <table class="table table table-bordered tableCustom">
+        <thead>
+            <tr>
+                <th scope="col">Họ và tên</th>
+                <th scope="col">Ngày sinh</th>
+                <th scope="col">Giới tính</th>
+                <th scope="col">Phòng đơn</th>
+                <th scope="col">Thành tiền (Giá tour + phụ thu phòng đơn)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each bookingInfo}}
+            <tr>
+                <td>{{this.customer_name}}</td>
+                <td>{{this.customer_dob}}</td>
+
+                {{#if this.customer_gender}}
+                    <td>Nam</td>
+                {{else}}
+                    <td>Nữ</td>
+                {{/if}}
+
+                {{#if this.booking_single_room}}
+                    <td>Có</td>
+                {{else}}
+                    <td>Không</td>
+                {{/if}}
+                <td>{{this.price}}</td>
+            </tr>
+            {{/each}}
+            <tr><td colspan="5">Cộng tổng: {{totalPrice}}</td></tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <p><i><b>*Ghi chú:</b></i> {{note}}</p>
+</div>
