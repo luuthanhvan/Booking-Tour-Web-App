@@ -199,26 +199,10 @@ button:focus{
 
 .cover-slides{
 	height: 100vh;
+    background-image: url("/images/bg-5.jpg");
+    background-attachment: fixed;
 }
-.slides-navigation a {
-	background: #cfa671;
-    position: absolute;
-    height: 70px;
-    width: 70px;
-    top: 50%;
-    font-size: 20px;
-    display: block;
-    color: #fff;
-	line-height: 80px;
-	text-align: center;
-    transition: all .3s ease-in-out;
-}
-.slides-navigation a i{
-	font-size: 40px;
-}
-.slides-navigation a:hover {
-	background: #010101;
-}
+
 .cover-slides .container{
 	height: 100%;
 	position: relative;
@@ -266,34 +250,18 @@ button:focus{
     border-color: #cfa671;
 }
 
-.overlay-background {
-    background: #333;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    top: 0;
-	opacity: 0.5;
-}
-
 .cover-slides h1{
 	font-family: 'Arbutus Slab', serif;
 	font-weight: 500;
 	font-size: 64px;
 	color: #fff;
-}
-.cover-slides p{
-	font-size: 18px;
-	color: #fff;
-}
-.slides-pagination a{
-	border: 2px solid #ffffff;
-}
-.slides-pagination a.current{
-	background: #cfa671;
-	border: 2px solid #cfa671;
+    top: 200px;
+    color: black;
 }
 
+.input-container{
+    top: 250px;
+}
 /*------------------------------------------------------------------
     About
 -------------------------------------------------------------------*/

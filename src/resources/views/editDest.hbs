@@ -1,11 +1,11 @@
 <div class="container-fluid">
     {{#each destInfo}}
         <h3>Chỉnh sửa thông tin địa điểm</h3>
-        <form method="POST" enctype="multipart/form-data">
+        <form name="editDestInfoForm" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label>Mã địa điểm</label>
-                    <input type="text" class="form-control" name="destId" value="{{this.dest_id}}">
+                    <input type="text" class="form-control" name="destId" value="{{this.dest_id}}" readonly>
                 </div>
 
                 <div class="col-md-6 mb-3">

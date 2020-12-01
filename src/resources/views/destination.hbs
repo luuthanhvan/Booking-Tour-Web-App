@@ -1,15 +1,17 @@
 <div class="container-fluid">
     <h3>Nhập thông tin địa điểm</h3>
-    <form method="POST" enctype="multipart/form-data">
+    <form id="destForm" name="destInfoForm" enctype="multipart/form-data">
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label>Mã địa điểm</label>
                 <input type="text" class="form-control" name="destId">
+                <p id="destIdErr" class="errorMessage"></p>
             </div>
 
             <div class="col-md-6 mb-3">
                 <label>Tên địa điểm</label>
                 <input type="text" class="form-control" name="destName">
+                <p id="destNameErr" class="errorMessage"></p>
             </div>
         </div>
 
@@ -17,19 +19,21 @@
             <div class="col">
                 <label>Tỉnh/Thành phố</label>
                 <input type="text" class="form-control" name="destAddress">
+                <p id="destAddressErr" class="errorMessage"></p>
             </div>
         </div>
 
         <div class="form-row">
             <label>Hình ảnh</label>
             <input type="file" class="form-control-file" name="destImg">
+            <p id="destImgErr" class="errorMessage"></p>
         </div>
 
         <div class="d-flex justify-content-center">
             <div class="btn-group" role="group">
-                <button class="btn btn-info" value="addDestAct" name="addDest" data-act='btnAddDest'>Thêm</button>
-                <button class="btn btn-info" value="editDestAct" name="editDest" data-act='btnEditDest'>Sửa</button>
-                <button class="btn btn-info" value="deleteDestAct" name="deleteDest" data-act='btnDeleteDest'>Xóa</button>
+                <button class="btn btn-info" value="addDestAct">Thêm</button>
+                <button class="btn btn-info" value="editDestAct">Sửa</button>
+                <button class="btn btn-info" value="deleteDestAct">Xóa</button>
             </div>
         </div>
     </form>
@@ -62,4 +66,91 @@
             </tbody>
         </table>
     </div>
+    <script>
+        // get all dest id from checkbox (checked)
+        var dests = [];
+        var checkBoxsDest = document.querySelectorAll(".chooseDest");
+        checkBoxsDest.forEach((item, i) => {
+            item.onclick = function(){
+                if(item.checked){
+                    dests.push(item.value);
+                }
+            }
+        });
+        // using jquery to handle click on buttons
+        $(document).ready(function(){
+            $("#destForm button").click(function(event){
+                if($(this).attr("value") == "addDestAct"){
+                    var checked = true;
+                    $("#destForm").submit(function(){
+                        let destId = document.forms["destInfoForm"]["destId"].value;
+                        let destName = document.forms["destInfoForm"]["destName"].value;
+                        let destAddress = document.forms["destInfoForm"]["destAddress"].value;
+                        let destImage = document.forms["destInfoForm"]["destImg"].value;
+
+                        if(destId.length == 0){
+                            document.getElementById("destIdErr").innerHTML = "* Trường Mã địa điểm không được bỏ trống.";
+                            checked = false;
+                        }
+
+                        if(destId.length > 10){
+                            document.getElementById("destIdErr").innerHTML = "* Trường Mã địa điểm chỉ có độ dài tối đa là 10 kí tự.";
+                            checked = false;
+                        }
+
+                        if(destName.length == 0){
+                            document.getElementById("destNameErr").innerHTML = "* Trường Tên địa điểm không được bỏ trống.";
+                            checked = false;
+                        }
+
+                        if(destAddress.length == 0){
+                            document.getElementById("destAddressErr").innerHTML = "* Trường Tỉnh/Thành phố không được bỏ trống.";
+                            checked = false;
+                        }
+
+                    	if(destImage.length == 0){
+                    		document.getElementById("destImgErr").innerHTML = "* Trường Hình ảnh không được bỏ trống.";
+                    		checked = false;
+                    	}
+
+                        if(destImage.length != 0 && !isImageFile(destImage)){
+                    		document.getElementById("destImgErr").innerHTML = "* Chỉ hỗ trợ các loại file có phần mở rộng là .png, .jpeg, .jpg, .jpe, .webp, .bmp và .gif";
+                    		checked = false;
+                    	}
+
+                        return checked;
+                    });
+
+                    if (!checked){
+		                event.preventDefault();
+                	}
+                	else{
+                        $("#destForm").attr("method", "POST");
+                        $("#destForm").attr("action", "/manage/dest/add");
+                	}
+                }
+
+                if($(this).attr("value") == "editDestAct"){
+                    $("#destForm").attr("method", "POST");
+                    $("#destForm").attr("action", "/manage/dest/edit?id='"+dests+"'");
+                }
+                
+                if($(this).attr("value") == "deleteDestAct"){
+                    $("#destForm").attr("method", "POST");
+                    $("#destForm").attr("action", "/manage/dest/delete?id='"+dests+"'");
+                }
+            });
+        });
+
+        // function to check a file is image file
+        function isImageFile(fileInput){
+        	let acceptFile = ["png", "jpeg", "jpg", ".jpe", ".webp", "gif", "bmp"];
+        	let fileType = fileInput.substring(fileInput.lastIndexOf(".") + 1, fileInput.length);
+        	// console.log(fileType)
+        	if(acceptFile.includes(fileType))
+        		return true;
+        	return false;
+        }
+
+    </script>
 </div>

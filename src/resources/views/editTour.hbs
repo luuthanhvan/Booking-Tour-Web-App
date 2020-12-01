@@ -1,11 +1,11 @@
 <div class="container-fluid">
     <h3>Nhập thông tin tour</h3>
-    <form method="POST">
+    <form name="editTourInfoForm" method="POST">
         {{#each tourInfo}}
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label>Mã tour</label>
-                <input type="text" class="form-control" name="tourId" value="{{this.tour_id}}">
+                <input type="text" class="form-control" name="tourId" value="{{this.tour_id}}" readonly>
             </div>
 
             <div class="col-md-6 mb-3">

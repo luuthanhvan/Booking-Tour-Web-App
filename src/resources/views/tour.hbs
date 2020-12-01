@@ -1,15 +1,17 @@
 <div class="container-fluid">
     <h3>Nhập thông tin tour</h3>
-    <form method="POST">
+    <form id="tourForm" name="tourInfoForm">
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label>Mã tour</label>
                 <input type="text" class="form-control" name="tourId">
+                <p id="tourIdErr" class="errorMessage"></p>
             </div>
 
             <div class="col-md-6 mb-3">
                 <label>Tên tour</label>
                 <input type="text" class="form-control" name="tourName">
+                <p id="tourNameErr" class="errorMessage"></p>
             </div>
         </div>
 
@@ -17,14 +19,17 @@
             <div class="col">
                 <label>Giá tour</label>
                 <input type="text" class="form-control" name="tourPrice" placeholder="VNĐ">
+                <p id="tourPriceErr" class="errorMessage"></p>
             </div>
             <div class="col">
                 <label>Phụ thu phòng đơn</label>
                 <input type="text" class="form-control" name="tourSurcharge" placeholder="VNĐ">
+                <p id="tourSurchargeErr" class="errorMessage"></p>
             </div>
             <div class="col">
                 <label>Phương tiện</label>
                 <input type="text" class="form-control" name="tourVehicle">
+                <p id="tourVehicleErr" class="errorMessage"></p>
             </div>
         </div>
 
@@ -63,10 +68,12 @@
             <div class="col">
                 <label>Ngày khởi hành</label>
                 <input type="text" class="form-control" name="dateGo" placeholder="dd/mm/yyyy">
+                <p id="dateGoErr" class="errorMessage"></p>
             </div>
             <div class="col">
                 <label>Thời gian</label>
                 <input type="text" class="form-control" name="time" placeholder="3 ngày 2 đêm">
+                <p id="timeErr" class="errorMessage"></p>
             </div>
             <div class="col">
                 <label>Địa điểm xuất phát</label>
@@ -78,39 +85,41 @@
             </div>
             <div class="col">
                 <label>Điểm đến</label>
-                <select class="custom-select" name="destEnd[]" multiple>
+                <select class="custom-select" name="destEnd[]" id="destEnd" multiple>
                     {{#each destCity}}
                         <option value="{{this.dest_address}}">{{this.dest_address}}</option>
                     {{/each}}
                 </select>
+                <p id="destEndErr" class="errorMessage"></p>
             </div>
         </div>
 
         <div class="form-row">
             <div class="col">
                 <label>Địa điểm tham quan</label>
-                <select class="custom-select" name="touristDest[]" multiple>
+                <select class="custom-select" name="touristDest[]" id="touristDest" multiple>
                     {{#each destInfo}}
                         <option value="{{this.dest_id}}">{{this.dest_name}}</option>
                     {{/each}}
                 </select>
+                <p id="touristDestErr" class="errorMessage"></p>
             </div>
         </div>
 
         <div class="form-group">
             <label>Chương trình Tour</label>
             <textarea id="summernote" name="tourDescription"></textarea>
+            <p id="tourDesErr" class="errorMessage"></p>
         </div>
 
         <div class="d-flex justify-content-center">
             <div class="btn-group" role="group">
-                <button class="btn btn-info" value="addTourAct" name="addTour" data-act='btnAddTour'>Thêm</button>
-                <button class="btn btn-info" value="editTourAct" name="editTour" data-act='btnEditTour'>Sửa</button>
-                <button class="btn btn-info" value="deleteTourAct" name="deleteTour" data-act='btnDeleteTour'>Xóa</button>
+                <button class="btn btn-info" value="addTourAct">Thêm</button>
+                <button class="btn btn-info" value="editTourAct">Sửa</button>
+                <button class="btn btn-info" value="deleteTourAct">Xóa</button>
             </div>
         </div>
     </form>
-
     <div class="dataGrid">
         <table class="table table-sm table-bordered table-hover">
             <thead>
@@ -148,6 +157,7 @@
                             <td>{{this.tour_max_customer}}</td>
                             <td>{{this.tour_min_customer}}</td>
                             <td id="description"></td>
+
                             <script>
                                 // data inserted from summernote to database is a string
                                 // so I need to convert plain text to html Object
@@ -157,6 +167,7 @@
                                 // console.log(htmlCode.body.outerText);
                                 document.getElementById('description').innerHTML = htmlCode.body.outerText;
                             </script>
+
                             <td><input class='chooseTour' name="tour" type="checkbox" value="{{this.tour_id}}"/></td>
                         </tr>
                     {{/each}}
@@ -166,4 +177,140 @@
             </tbody>
         </table>
     </div>
+    <script>
+        // get all tour id from checkbox (checked)
+        let tours = [];
+        let checkBoxsTour = document.querySelectorAll(".chooseTour");
+        checkBoxsTour.forEach((item, i) => {
+            item.onclick = function(){
+                if(item.checked){
+                    tours.push(item.value);
+                }
+            }
+        });
+        // using jquery to handle click on buttons
+        $(document).ready(function(){
+            $("#tourForm button").click(function(event){
+                if($(this).attr("value") == "addTourAct"){
+                    var checked = true;
+                    $("#tourForm").submit(function(){
+                        let tourId = document.forms["tourInfoForm"]["tourId"].value;
+                        let tourName = document.forms["tourInfoForm"]["tourName"].value;
+                        let tourPrice = document.forms["tourInfoForm"]["tourPrice"].value;
+                        let tourSurcharge = document.forms["tourInfoForm"]["tourSurcharge"].value;
+                        let tourVehicle = document.forms["tourInfoForm"]["tourVehicle"].value;
+                        let dateGo = document.forms["tourInfoForm"]["dateGo"].value;
+                        let time = document.forms["tourInfoForm"]["time"].value;
+                        let destEnd = document.getElementById("destEnd");
+                        let touristDest = document.getElementById("touristDest");
+                        let tourDescription = document.forms["tourInfoForm"]["tourDescription"].value;
+
+                        if(tourId.length == 0){
+                            document.getElementById("tourIdErr").innerHTML = "* Trường Mã tour không được bỏ trống.";
+                            checked = false;
+                        }
+
+                    	if(tourId.length > 10){
+                            document.getElementById("tourIdErr").innerHTML = "* Trường Mã tour chỉ có độ dài tối đa là 10 kí tự.";
+                            checked = false;
+                        }
+
+                        if(tourName.length == 0){
+                            document.getElementById("tourNameErr").innerHTML = "* Trường Tên tour không được bỏ trống.";
+                            checked = false;
+                        }
+
+                        if(tourPrice.length == 0){
+                            document.getElementById("tourPriceErr").innerHTML = "* Trường Giá tour không được bỏ trống.";
+                            checked = false;
+                        }
+
+                        if(tourSurcharge.length == 0){
+                            document.getElementById("tourSurchargeErr").innerHTML = "* Trường Phụ thu không được bỏ trống.";
+                            checked = false;
+                        }
+
+                    	let rePrice = /[0-9]*[,]*[.]/;
+
+                    	if(tourPrice.length != 0 && !tourPrice.match(rePrice)){
+                    		document.getElementById("tourPriceErr").innerHTML = "* Giá tour không được phép chứa ký tự. Bạn chỉ có thể dùng dấu chấm (.) hoặc phẩy (,) để phân cách các đơn vị. Ví dụ: 100.000 hoặc 1,000,000";
+                    		checked = false;
+                    	}
+
+                        if(tourSurcharge.length != 0 && !tourSurcharge.match(rePrice)){
+                            document.getElementById("tourSurchargeErr").innerHTML = "* Giá phụ thu không được phép chứa ký tự. Bạn chỉ có thể dùng dấu chấm (.) hoặc phẩy (,) để phân cách các đơn vị. Ví dụ: 100.000 hoặc 1,000,000";
+                            checked = false;
+                        }
+
+                        if(tourVehicle.length == 0){
+                            document.getElementById("tourVehicleErr").innerHTML = "* Trường Phương tiện không được bỏ trống.";
+                            checked = false;
+                        }
+
+                        if(dateGo.length == 0){
+                            document.getElementById("dateGoErr").innerHTML = "* Trường Ngày khởi hành không được bỏ trống.";
+                            checked = false;
+                        }
+
+                        reDate = /\d\d[/]\d\d[/]\d\d\d\d/;
+                        if(dateGo.length != 0 && !dateGo.match(reDate)){
+                            document.getElementById("dateGoErr").innerHTML = "* Vui lòng nhập ngày theo format là dd/mm/yyyy";
+                            checked = false;
+                        }
+
+                        if(time.length == 0){
+                            document.getElementById("timeErr").innerHTML = "* Trường Thời gian không được bỏ trống.";
+                            checked = false;
+                        }
+
+                        if(!isSelectedItem(destEnd)){
+                            document.getElementById("destEndErr").innerHTML = "* Vui lòng chọn Điểm đến.";
+                            checked = false;
+                        }
+
+                        if(!isSelectedItem(touristDest)){
+                            document.getElementById("touristDestErr").innerHTML = "* Vui lòng chọn Địa điểm tham quan.";
+                            checked = false;
+                        }
+
+                        if(tourDescription.length == 0){
+                            document.getElementById("tourDesErr").innerHTML = "* Trường Chương trình tour không được bỏ trống.";
+                            checked = false;
+                        }
+
+                        return checked;
+                    });
+
+                    if(!checked){
+                        event.preventDefault();
+                    }
+                    else{
+                        $("#tourForm").attr("method", "POST");
+                        $("#tourForm").attr("action", "/manage/tour/add");
+                    }
+                }
+                if($(this).attr("value") == "editTourAct"){
+                    $("#tourForm").attr("method", "POST");
+                    $("#tourForm").attr("action", "/manage/tour/edit?id='"+tours+"'");
+                }
+                if($(this).attr("value") == "deleteTourAct"){
+                    if(!isValidFormTour()){
+                    $("#tourForm").attr("method", "POST");
+                    $("#tourForm").attr("action", "/manage/tour/delete?id='"+tours+"'");
+                    }
+                }
+            });
+        });
+
+        // function to check whether a dropdown is selected
+        function isSelectedItem(object){
+            for (let i = 0, len = object.options.length; i < len; i++ ) {
+                let opt = object.options[i];
+                if (opt.selected === true ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    </script>
 </div>

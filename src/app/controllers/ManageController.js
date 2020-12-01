@@ -72,21 +72,27 @@ class ManageController{
         const con = req.con;
         // get data from form and pass it to addTour()
         const data = req.body;
-
         // format date
         let date = data.dateGo.split("/"); // [dd, mm, yyyy]
-        let dateFormatted = date[2] + "-" + date[1] + "-" + date[0]; // date formatted: 'yyyy-mm-dd'
+        data.dateGo = date[2] + "-" + date[1] + "-" + date[0]; // 'yyyy-mm-dd'
 
         // format tour price and surcharge
-        let search = '.';
-        let replacement = '';
-        let priceFormatted = data.tourPrice.split(search).join(replacement);
-        let surchargeFormatted = data.tourSurcharge.split(search).join(replacement);
+        let priceFormatted, surchargeFormatted;
+        if(data.tourPrice.includes('.'))
+            priceFormatted = data.tourPrice.split('.').join('');
+        else if(data.tourPrice.includes(','))
+            priceFormatted = data.tourPrice.split(',').join('');
 
-        data.dateGo = dateFormatted;
+        if(data.tourSurcharge.includes('.'))
+            surchargeFormatted = data.tourSurcharge.split('.').join('');
+        else if(data.tourSurcharge.includes(','))
+            surchargeFormatted = data.tourSurcharge.split(',').join('');
+
+
         data.tourPrice = priceFormatted;
         data.tourSurcharge = surchargeFormatted;
 
+        // console.log(data);
         manageModel.addTour(con, data, function(err){
             if(err) throw err;
             res.redirect('/manage/tour');

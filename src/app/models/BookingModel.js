@@ -46,11 +46,13 @@ class BookingModel{
         "FROM customer, ticket WHERE customer.customer_id=ticket.customer_id AND ticket.tour_id='"+tourId+"');";
         sql += "SELECT * FROM tour WHERE tour_id='"+tourId+"';";
         sql += "SELECT * FROM (ticket INNER JOIN customer on customer.customer_id=ticket.customer_id) " +
-                "INNER JOIN invoice ON ticket.invoice_id=invoice.invoice_id;";
+                "INNER JOIN invoice ON ticket.invoice_id=invoice.invoice_id " +
+                "WHERE invoice.invoice_id=(SELECT MAX(invoice_id) FROM invoice);";
         // execute sql statement
         con.query(sql, callback);
     }
 
+    /*
     getInfo(con, callback){
         // sql statements
         // get main customer info
@@ -58,11 +60,12 @@ class BookingModel{
         "FROM customer, ticket WHERE customer.customer_id=ticket.customer_id AND ticket.tour_id='tour_0001');";
         sql += "SELECT * FROM tour WHERE tour_id='tour_0001';";
         sql += "SELECT * FROM (ticket INNER JOIN customer on customer.customer_id=ticket.customer_id) " +
-                "INNER JOIN invoice ON ticket.invoice_id=invoice.invoice_id;";
+                "INNER JOIN invoice ON ticket.invoice_id=invoice.invoice_id " +
+                "WHERE invoice.invoice_id=(SELECT MAX(invoice_id) FROM invoice);";
 
         // execute sql statements
         con.query(sql, callback);
-    }
+    }*/
 }
 
 module.exports = new BookingModel();

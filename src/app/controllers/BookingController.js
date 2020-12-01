@@ -13,7 +13,8 @@ class BookingController{
             // format price and surcharge to display
             tourInfo[0]['tour_price'] = tourInfo[0]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
             tourInfo[0]['tour_surcharge'] = tourInfo[0]['tour_surcharge'].toString().replace(/(?=(.{3})+$)/gm, ".");
-            // console.log(tourInfo[0]['tour_price']);
+            // format date to display
+            tourInfo[0]['tour_date_go'] = tourInfo[0]['tour_date_go'].getDate() + "/" + (tourInfo[0]['tour_date_go'].getMonth()+1) + "/" + tourInfo[0]['tour_date_go'].getFullYear();
 
             res.render('booking', {layout: 'user_base_page', title: 'Đặt tour', tourInfo, destInfo});
         });
@@ -130,7 +131,7 @@ class BookingController{
 
             res.render('temp', {layout: 'user_base_page', title: 'Temp page', mainCustomerInfo, bookingInfo, date, time, note, totalPrice, tourInfo});
         });
-    }*/
+    } */
 }
 
 module.exports = new BookingController();

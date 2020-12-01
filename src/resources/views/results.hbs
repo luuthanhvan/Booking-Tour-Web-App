@@ -1,0 +1,14 @@
+<!-- Start Menu -->
+{{#each tourInfo}}
+<div class="row">
+    <div class="col-md-4">
+        <img src="{{this.dest_image}}" alt="Image" width="100" height="100">
+    </div>
+    <div class="col">
+        <p>{{this.tour_name}}</p>
+        <h5>{{this.tour_price}} đ</h5>
+        <p><a class="btn btn-sm btn-circle btn-outline-new-white" href="/tourDetails?tourId='{{this.tour_id}}'">Chi tiết tour</a></p>
+    </div>
+</div>
+{{/each}}
+<!-- End Menu -->
