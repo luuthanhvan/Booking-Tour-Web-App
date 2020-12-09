@@ -1,9 +1,9 @@
 class SiteModel{
     getTour(con, callback) {
         // sql statement
-        let sql = "SELECT tour_id, tour_name, tour_price FROM tour;";
-        sql += "SELECT tourist_destination.dest_image from tourist_destination, tour_details " +
-                "WHERE tourist_destination.dest_id=tour_details.dest_id LIMIT 1;";
+        let sql = "SELECT tour.tour_id, tour_name, tour_price, dest_image FROM tour, tour_details, tourist_destination WHERE tour.tour_id=tour_details.tour_id " +
+        "AND tour_details.dest_id=tourist_destination.dest_id GROUP BY tour.tour_id;";
+
         // execute sql statement
         con.query(sql, callback);
     }

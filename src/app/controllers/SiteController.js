@@ -5,15 +5,16 @@ class SiteController{
         let con = req.con;
         siteModel.getTour(con, function(err, results){
             if(err) throw err;
-            let tourInfo = results[0].length == 0 ? [] : results[0];
-            if(tourInfo.length != 0 && results[1].length != 0){
-                // append data got from the second sql to the tourInfo array
-                Object.assign(tourInfo[0], results[1][0]);
-                // format price to display
-                tourInfo[0]['tour_price'] = tourInfo[0]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
+            let tourInfo = results.length == 0 ? [] : results;
+            // console.log(tourInfo);
+
+            // format tour price before send it to client
+            if(tourInfo.length != 0){
+                for(let i = 0; i < tourInfo.length; i++){
+                    tourInfo[i]['tour_price'] = tourInfo[i]['tour_price'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                }
             }
 
-            // console.log(tourInfo);
             res.render('home', {layout: 'home_base_page', title: 'Trang chủ', tourInfo});
         });
     }
