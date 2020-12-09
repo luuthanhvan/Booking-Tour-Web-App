@@ -39,7 +39,8 @@ class ManageModel{
     }
 
     editTour(con, tourId, callback){
-        let sql = "SELECT * from tour WHERE tour_id='"+tourId.slice(1,tourId.length-1)+"';";
+        let sql = "SELECT DISTINCT dest_address from tourist_destination;";
+        sql += "SELECT * from tour WHERE tour_id='"+tourId.slice(1,tourId.length-1)+"';";
         sql += "SELECT * from tourist_destination;";
         con.query(sql, callback);
     }

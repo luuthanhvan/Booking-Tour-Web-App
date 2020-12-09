@@ -52,8 +52,15 @@
     margin-top: 5px;
 }
 
+.table-wrapper-scroll-y {
+    display: block;
+}
+
 .dataGrid {
     margin-top: 20px;
+    position: relative;
+    height: 600px;
+    overflow: auto;
 }
 
 .noData{

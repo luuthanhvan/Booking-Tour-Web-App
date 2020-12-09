@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <h3>Nhập thông tin tour</h3>
-    <form name="editTourInfoForm" method="POST">
+    <form name="editTourInfoForm" id="editTourForm">
         {{#each tourInfo}}
         <div class="form-row">
             <div class="col-md-6 mb-3">
@@ -69,15 +69,15 @@
             <div class="col">
                 <label>Địa điểm xuất phát</label>
                 <select class="custom-select" name="destStart">
-                    {{#each destInfo}}
-                        <option value="{{this.dest_id}}">{{this.dest_address}}</option>
+                    {{#each destCity}}
+                        <option value="{{this.dest_address}}">{{this.dest_address}}</option>
                     {{/each}}
                 </select>
             </div>
             <div class="col">
                 <label>Điểm đến</label>
                 <select class="custom-select" name="destEnd[]" multiple>
-                    {{#each destInfo}}
+                    {{#each destCity}}
                         <option value="{{this.dest_address}}">{{this.dest_address}}</option>
                     {{/each}}
                 </select>
@@ -98,13 +98,29 @@
         {{#each tourInfo}}
         <div class="form-group">
             <label>Chương trình Tour</label>
-            <textarea class="form-control" name="tourDescription" rows="10">{{this.tour_description}}</textarea>
+            <textarea id="summernote" name="tourDescription">{{this.tour_description}}</textarea>
         </div>
         <div class="d-flex justify-content-center">
             <div class="btn-group" role="group">
-                <button class="btn btn-info" value="updateTourAct" name="updateTour" data-act='btnUpdateTour'>Cập nhật</button>
+                <button class="btn btn-info" value="updateTourAct">Cập nhật</button>
+                <button class="btn btn-info" value="returnTourAct">Trở về</button>
             </div>
         </div>
         {{/each}}
     </form>
+
+    <script>
+        $(document).ready(function(){
+            $("#editTourForm button").click(function(){
+                if($(this).attr("value") == "updateTourAct"){
+                    $("#editTourForm").attr("method", "POST");
+                    $("#editTourForm").attr("action", "/manage/tour/update");
+                }
+                if($(this).attr("value") == "returnTourAct"){
+                    window.location.href = "/manage/tour";
+                    return false;
+                }
+            });
+        });
+    </script>
 </div>

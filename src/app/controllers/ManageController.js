@@ -18,9 +18,22 @@ class ManageController{
             }
             else{
                 let destCity = results[0];
+                // get dest info from the first sql statement -> display dest name, address in select-option tag
                 let destInfo = results[1];
-                // get tour info from the first sql statement
+                // get tour info from the last sql statement
                 let tourInfo = results[2].length == 0 ? [] : results[2];
+                // console.log(tourInfo);
+
+                // Processing: format date go, tour price, tour surcharge and tour description before send to client
+                if(tourInfo.length != 0){
+                    for(let i = 0; i < tourInfo.length; i++){
+                        tourInfo[i]['tour_date_go'] = tourInfo[i]['tour_date_go'].getDate() + "/" + (tourInfo[i]['tour_date_go'].getMonth()+1) + "/" + tourInfo[i]['tour_date_go'].getFullYear();
+                        // convert a string like 1000000 -> 1.000.000
+                        tourInfo[i]['tour_price'] = tourInfo[i]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
+                        tourInfo[i]['tour_surcharge'] = tourInfo[i]['tour_surcharge'].toString().replace(/(?=(.{3})+$)/gm, ".");
+                    }
+                }
+
                 /* append { key: value } to [ RowDataPacket {
                                                 tour_id: 'tour1',
                                                 tour_name: 'Du lịch Hà Nội - Lào Cai',
@@ -35,17 +48,11 @@ class ManageController{
                                                 tour_description: 'abc',
                                                 tour_status: 1 }] */
 
-                // format date, price and surcharge to display
-                if(tourInfo.length != 0){
-                    tourInfo[0]['tour_date_go'] = tourInfo[0]['tour_date_go'].getDate() + "/" + (tourInfo[0]['tour_date_go'].getMonth()+1) + "/" + tourInfo[0]['tour_date_go'].getFullYear();
-                    // convert a string like 1000000 -> 1.000.000
-                    tourInfo[0]['tour_price'] = tourInfo[0]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
-                    tourInfo[0]['tour_surcharge'] = tourInfo[0]['tour_surcharge'].toString().replace(/(?=(.{3})+$)/gm, ".");
-
+                if(results[3].length != 0){
+                    for(let i = 0; i < results[3].length; i++){
+                        Object.assign(tourInfo[i], results[3][i]);
+                    }
                 }
-
-                if(results[3].length != 0)
-                    Object.assign(tourInfo[0], results[3][0]);
                 /* Result after append:
                     [ RowDataPacket {
                         tour_id: 'tour1',
@@ -62,7 +69,7 @@ class ManageController{
                         tour_status: 1,
                         destinationName: 'Hoàng Thành Thăng Long, Đèo Ô Quy Hồ' } ]
                 */
-                // get dest info from the first sql statement -> display dest name, address in select-option tag
+                // console.log(tourInfo);
                 res.render('tour', {layout: 'admin_base_page', title: 'Tour', tourInfo, destInfo, destCity});
             }
         });
@@ -125,9 +132,21 @@ class ManageController{
         else{
             manageModel.editTour(con, tourId, function(err, results){
                 if(err) throw err;
-                let tourInfo = results[0].length == 0 ? [] : results[0];
-                let destInfo = results[1].length == 0 ? [] : results[1];
-                res.render('editTour', {layout: 'admin_base_page', title: 'Chỉnh sửa Tour', tourInfo, destInfo});
+                let destCity = results[0].length == 0 ? [] : results[0];
+                let tourInfo = results[1].length == 0 ? [] : results[1];
+                let destInfo = results[2].length == 0 ? [] : results[2];
+
+                // Processing: format date go, tour price, tour surcharge and tour description before send to client
+                if(tourInfo.length != 0){
+                    for(let i = 0; i < tourInfo.length; i++){
+                        tourInfo[i]['tour_date_go'] = tourInfo[i]['tour_date_go'].getDate() + "/" + (tourInfo[i]['tour_date_go'].getMonth()+1) + "/" + tourInfo[i]['tour_date_go'].getFullYear();
+                        // convert a string like 1000000 -> 1.000.000
+                        tourInfo[i]['tour_price'] = tourInfo[i]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
+                        tourInfo[i]['tour_surcharge'] = tourInfo[i]['tour_surcharge'].toString().replace(/(?=(.{3})+$)/gm, ".");
+                    }
+                }
+
+                res.render('editTour', {layout: 'admin_base_page', title: 'Chỉnh sửa Tour', destCity, tourInfo, destInfo});
             });
         }
     }

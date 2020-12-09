@@ -31,7 +31,7 @@ app.engine('.hbs', exphbs({
     // handlebars config
     extname: '.hbs',
     layoutsDir: path.join(__dirname, 'resources/views/layouts'),
-    partialsDir: path.join(__dirname, 'resources/views/partials')
+    partialsDir: path.join(__dirname, 'resources/views/partials'),
 }));
 app.set('view engine', '.hbs');
 // The views directory is in ./resource/views so we need to indicate the path to views directory

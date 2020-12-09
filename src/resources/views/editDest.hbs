@@ -1,7 +1,7 @@
 <div class="container-fluid">
     {{#each destInfo}}
         <h3>Chỉnh sửa thông tin địa điểm</h3>
-        <form name="editDestInfoForm" method="POST" enctype="multipart/form-data">
+        <form name="editDestInfoForm" id="editDestForm" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label>Mã địa điểm</label>
@@ -25,9 +25,25 @@
             </div>
             <div class="d-flex justify-content-center">
                 <div class="btn-group" role="group">
-                    <button class="btn btn-info" value="updateDestAct" name="updateDest" data-act='btnUpdateDest'>Cập nhật</button>
+                    <button class="btn btn-info" value="updateDestAct">Cập nhật</button>
+                    <button class="btn btn-info" id="returnDest" value="returnDestAct">Trở về</button>
                 </div>
             </div>
         </form>
     {{/each}}
+
+    <script>
+        $(document).ready(function(){
+            $("#editDestForm button").click(function(){
+                if($(this).attr("value") == "updateDestAct"){
+                    $("#editDestForm").attr("method", "POST");
+                    $("#editDestForm").attr("action", "/manage/dest/update");
+                }
+                if($(this).attr("value") == "returnDestAct"){
+                    window.location.href = '/manage/dest';
+                    return false;
+                }
+            });
+        });
+    </script>
 </div>
