@@ -229,7 +229,7 @@
                     checked = false;
                 }
 
-                let rePrice = /[0-9]*[,]*[.]/;
+                let rePrice = /[0-9,.]/;
                 if(tourPriceVal.length == 0){
                     $("#tourPriceErrorMessage").show();
                     $("#tourPriceErrorMessage").html("* Trường Giá tour không được bỏ trống.");

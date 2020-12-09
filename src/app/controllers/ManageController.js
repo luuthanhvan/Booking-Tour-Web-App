@@ -22,15 +22,16 @@ class ManageController{
                 let destInfo = results[1];
                 // get tour info from the last sql statement
                 let tourInfo = results[2].length == 0 ? [] : results[2];
-                // console.log(tourInfo);
+
+                // console.log(tourInfo[0]['tour_price'].toLocaleString()); // eg: 1000000 -> 1,000,000
 
                 // Processing: format date go, tour price, tour surcharge and tour description before send to client
                 if(tourInfo.length != 0){
                     for(let i = 0; i < tourInfo.length; i++){
                         tourInfo[i]['tour_date_go'] = tourInfo[i]['tour_date_go'].getDate() + "/" + (tourInfo[i]['tour_date_go'].getMonth()+1) + "/" + tourInfo[i]['tour_date_go'].getFullYear();
                         // convert a string like 1000000 -> 1.000.000
-                        tourInfo[i]['tour_price'] = tourInfo[i]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
-                        tourInfo[i]['tour_surcharge'] = tourInfo[i]['tour_surcharge'].toString().replace(/(?=(.{3})+$)/gm, ".");
+                        tourInfo[i]['tour_price'] = tourInfo[i]['tour_price'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        tourInfo[i]['tour_surcharge'] = tourInfo[i]['tour_surcharge'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
                 }
 
@@ -79,25 +80,13 @@ class ManageController{
         const con = req.con;
         // get data from form and pass it to addTour()
         const data = req.body;
+
         // format date
         let date = data.dateGo.split("/"); // [dd, mm, yyyy]
         data.dateGo = date[2] + "-" + date[1] + "-" + date[0]; // 'yyyy-mm-dd'
-
         // format tour price and surcharge
-        let priceFormatted, surchargeFormatted;
-        if(data.tourPrice.includes('.'))
-            priceFormatted = data.tourPrice.split('.').join('');
-        else if(data.tourPrice.includes(','))
-            priceFormatted = data.tourPrice.split(',').join('');
-
-        if(data.tourSurcharge.includes('.'))
-            surchargeFormatted = data.tourSurcharge.split('.').join('');
-        else if(data.tourSurcharge.includes(','))
-            surchargeFormatted = data.tourSurcharge.split(',').join('');
-
-
-        data.tourPrice = priceFormatted;
-        data.tourSurcharge = surchargeFormatted;
+        data.tourPrice = data.tourPrice.includes(".") == true ? data.tourPrice.split(".").join("") : data.tourPrice.split(",").join("");
+        data.tourSurcharge = data.tourSurcharge.includes(".") == true ? data.tourSurcharge.split(".").join("") : data.tourSurcharge.split(",").join("");
 
         // console.log(data);
         manageModel.addTour(con, data, function(err){
@@ -154,7 +143,15 @@ class ManageController{
     updateTourInfo(req, res){
         const con = req.con;
         const data = req.body;
+
         // console.log(data);
+        // format date
+        let date = data.dateGo.split("/"); // [dd, mm, yyyy]
+        data.dateGo = date[2] + "-" + date[1] + "-" + date[0]; // 'yyyy-mm-dd'
+
+        data.tourPrice = data.tourPrice.includes(".") == true ? data.tourPrice.split(".").join("") : data.tourPrice.split(",").join("");
+        data.tourSurcharge = data.tourSurcharge.includes(".") == true ? data.tourSurcharge.split(".").join("") : data.tourSurcharge.split(",").join("");
+
         manageModel.updateTour(con, data, function(err){
             if(err) throw err;
             res.redirect('/manage/tour');
