@@ -47,8 +47,8 @@
                 <div class="form-group">
                     <label>Giới tính</label>
                     <select class="form-control" name="gender">
+                        <option value="0" selected>Nữ</option>
                         <option value="1">Nam</option>
-                        <option value="0">Nữ</option>
                     </select>
                 </div>
             </div>
@@ -75,27 +75,30 @@
 
             <!-- handle display list of days, months, years -->
             <script>
-                let optionsDay = "<select class='form-control' name='day'>";
+                let optionsDay = "<select class='form-control' id='day' name='day'>";
                 optionsDay += "<option>Ngày</option>";
                 for(let day = 1; day <= 31; day++){
                     optionsDay += `<option value=${day}>${day}</option>`;
                 }
                 optionsDay += "</select>";
+                optionsDay += "<p id='dayErr' class='errorMessage'></p>";
 
-                let optionsMonth = "<select class='form-control' name='month'>";
+                let optionsMonth = "<select class='form-control' id='month' name='month'>";
                 optionsMonth += "<option>Tháng</option>";
                 for(let month = 1; month <= 12; month++){
                     optionsMonth += `<option value=${month}>${month}</option>`;
                 }
                 optionsMonth += "</select>";
+                optionsMonth += "<p id='monthErr' class='errorMessage'></p>";
 
                 let currentYear = new Date().getFullYear(); // get the current year
-                let optionsYear = "<select class='form-control' name='year'>";
+                let optionsYear = "<select class='form-control' id='year' name='year'>";
                 optionsYear += "<option>Năm</option>";
                 for(let year = currentYear; year >= currentYear-70; year--){
                     optionsYear += `<option value=${year}>${year}</option>`;
                 }
                 optionsYear += "</select>";
+                optionsYear += "<p id='yearErr' class='errorMessage'></p>";
 
                 document.getElementById("selectDay").innerHTML = optionsDay;
                 document.getElementById("selectMonth").innerHTML = optionsMonth;

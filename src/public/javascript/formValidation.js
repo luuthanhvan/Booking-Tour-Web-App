@@ -1,3 +1,11 @@
+function selectedItem(options){
+    for(let i = 1; i < options.length; i++){
+        if(options[i].selected === true)
+            return true;
+    }
+    return false;
+}
+
 function validateSignupForm(){
     let username = document.forms["signupForm"]["username"].value;
 	let password1 = document.forms["signupForm"]["password1"].value;
@@ -5,6 +13,9 @@ function validateSignupForm(){
 	let fullname = document.forms["signupForm"]["fullname"].value;
     let phoneNumber = document.forms["signupForm"]["phoneNumber"].value;
     let address = document.forms["signupForm"]["address"].value;
+    let day = document.getElementById("day");
+    let month = document.getElementById("month");
+    let year = document.getElementById("year");
 
     let checked = false;
 
@@ -60,15 +71,22 @@ function validateSignupForm(){
 		checked = true;
 	}
 
-    return !checked;
-}
-
-function selectedItem(options){
-    for(let i = 1; i < options.length; i++){
-        if(options[i].selected === true)
-            return true;
+    if(!selectedItem(day.options)){
+        document.getElementById("dayErr").innerHTML = "* Vui lòng chọn Ngày sinh.";
+        checked = true;
     }
-    return false;
+
+    if(!selectedItem(month.options)){
+        document.getElementById("monthErr").innerHTML = "* Vui lòng chọn Tháng sinh.";
+        checked = true;
+    }
+
+    if(!selectedItem(year.options)){
+        document.getElementById("yearErr").innerHTML = "* Vui lòng chọn Năm sinh.";
+        checked = true;
+    }
+
+    return !checked;
 }
 
 function validateBookingForm(){
@@ -129,7 +147,6 @@ function validateBookingForm(){
             checked = true;
         }
     }
-
 
     if(nbCustomers.length != 0 && !nbCustomers.match(/^[0-9]$/)){
         document.getElementById("nbCustomersErr").innerHTML = "* Trường Số người đi cùng không được chứa chữ cái hoặc ký tự đặc biệt.";
