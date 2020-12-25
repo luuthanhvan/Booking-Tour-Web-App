@@ -60,32 +60,33 @@
         </thead>
         <tbody>
             <tr>
-                {{#each tourInfo}}
-                    <td id="adult"></td>
-                    <td id="child5to11"></td>
-                    <td id="child2to4"></td>
-                    <td id="childUnder2"></td>
-                    <td id="surcharge"></td>
-                    <script>
+
+                <td id="adult"></td>
+                <td id="child5to11"></td>
+                <td id="child2to4"></td>
+                <td id="childUnder2"></td>
+                <td id="surcharge"></td>
+                <script>
+                    {{#each tourInfo}}
                         let originalPrice = '{{this.tour_price}}';
                         let surcharge = '{{this.tour_surcharge}}';
                         // console.log(originalPrice);
                         let child5to11Price = parseInt(originalPrice.split(".").join("")) * (75/100);
-                        child5to11Price = child5to11Price.toString().replace(/(?=(.{3})+$)/gm, ".");
+                        child5to11Price = child5to11Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
                         let child2to4Price = parseInt(originalPrice.split(".").join("")) * (50/100);
-                        child2to4Price = child2to4Price.toString().replace(/(?=(.{3})+$)/gm, ".");
+                        child2to4Price = child2to4Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
                         let childUnder2Price = parseInt(originalPrice.split(".").join("")) * (25/100);
-                        childUnder2Price = childUnder2Price.toString().replace(/(?=(.{3})+$)/gm, ".");
+                        childUnder2Price = childUnder2Price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
                         document.getElementById("adult").innerHTML = originalPrice + " đ";
                         document.getElementById("child5to11").innerHTML = child5to11Price + " đ";
                         document.getElementById("child2to4").innerHTML = child2to4Price + " đ";
                         document.getElementById("childUnder2").innerHTML = childUnder2Price + " đ";
                         document.getElementById("surcharge").innerHTML = surcharge + " đ";
-                    </script>
-                {{/each}}
+                    {{/each}}
+                </script>
             </tr>
         </tbody>
     </table>
@@ -95,27 +96,29 @@
 <!-- Start Customer information part-->
 <div>
     <h2>THÔNG TIN KHÁCH HÀNG</h2>
-    <!--Start form-->
-	<form action="/booking/bookingDetails" method="post">
+    <!--Start form /booking/bookingDetails -->
+	<form action="/booking/bookingDetails" name="bookingForm" method="POST" onsubmit="return validateBookingForm()">
         <div class="row">
             <div class="col">
                 <div class="form-group">
                     <label>Họ và tên</label>
                     <input type="text" class="form-control" name="fullName[]">
+                    <p id="fullnameErr0" class="errorMessage"></p>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label>Số điện thoại</label>
                     <input type="text" class="form-control" name="phoneNumber">
+                    <p id="phoneNumberErr" class="errorMessage"></p>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label>Giới tính</label>
                     <select class="form-control" name="gender[]">
+                        <option value="0" selected>Nữ</option>
                         <option value="1">Nam</option>
-                        <option value="0">Nữ</option>
                     </select>
                 </div>
             </div>
@@ -124,6 +127,7 @@
         <div class="form-group">
             <label>Địa chỉ</label>
             <input type="text" class="form-control" name="address">
+            <p id="addressErr" class="errorMessage"></p>
         </div>
 
         <div class="row">
@@ -146,6 +150,7 @@
                     optionsDay += `<option value=${day}>${day}</option>`;
                 }
                 optionsDay += "</select>";
+                optionsDay += "<p id='dayErr0' class='errorMessage'></p>";
 
                 let optionsMonth = "<select class='form-control' name='months[]'>";
                 optionsMonth += "<option>Tháng</option>";
@@ -153,28 +158,30 @@
                     optionsMonth += `<option value=${month}>${month}</option>`;
                 }
                 optionsMonth += "</select>";
+                optionsMonth += "<p id='monthErr0' class='errorMessage'></p>";
 
                 let currentYear = new Date().getFullYear(); // get the current year
-                let optionsYear = "<select class='form-control' name='years[]' onchange='calAge(this.value)'>";
+                let optionsYear = "<select class='form-control' name='years[]'>";
                 optionsYear += "<option>Năm</option>";
                 for(let year = currentYear; year >= currentYear-70; year--){
                     optionsYear += `<option value=${year}>${year}</option>`;
                 }
                 optionsYear += "</select>";
+                optionsYear += "<p id='yearErr0' class='errorMessage'></p>";
 
                 document.getElementById("selectDay").innerHTML = optionsDay;
                 document.getElementById("selectMonth").innerHTML = optionsMonth;
                 document.getElementById("selectYear").innerHTML = optionsYear;
             </script>
-        
+
             <div class="col">
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
                             <label>Phòng đơn</label>
-                            <select class='form-control' name="singleRoom[]" onchange='calRoomPrice(this.value)'>
-                                <option value="1">Có</option>
+                            <select class='form-control' name="singleRoom[]">
                                 <option value="0" selected>Không</option>
+                                <option value="1">Có</option>
                             </select>
                         </div>
                     </div>
@@ -186,7 +193,8 @@
                     <div class="row">
                         <div class="col">
                             <label>Số người đi cùng</label>
-                            <input type="text" class="form-control" id="nbCustomers" onchange="loadHtmlTable(this.value)">
+                            <input type="text" class="form-control" id="nbCustomers" name="nbCustomers" onchange="loadHtmlTable(this.value)">
+                            <p id="nbCustomersErr" class="errorMessage"></p>
                         </div>
                     </div>
                 </div>
@@ -197,17 +205,17 @@
             <label>Ghi chú</label>
             <textarea class="form-control" name="note" rows="3"></textarea>
         </div>
+
         {{#each tourInfo}}
         <input type="hidden" name="tourId" value="{{this.tour_id}}"/>
+        <input type="hidden" name="tourPrice" value="{{this.tour_price}}"/>
+        <input type="hidden" name="tourSurcharge" value="{{this.tour_surcharge}}"/>
+        {{/each}}
+
         <!-- handle show form -->
         <script>
-            let tourPrice = parseInt('{{this.tour_price}}'.split(".").join("")); // convert string to number
-            let surchargePrice = parseInt('{{this.tour_surcharge}}'.split(".").join(""));
-            var total = 0;
-            var currentPrice = 0;
-
             function loadHtmlTable(nbCustomers){
-                let currentYear = new Date().getFullYear(); // get the current year
+                let currentYear = new Date().getFullYear();
                 let tableHtml = "<h2>NHẬP THÔNG TIN NHỮNG NGƯỜI ĐI CÙNG</h2>";
 
                 for(let i = 0; i < nbCustomers; i++){
@@ -219,10 +227,13 @@
                     tableHtml += "<tbody>";
                     tableHtml += "<tr>";
 
+                    let idFullname = "fullnameErr" + (i+1).toString();
+
                     tableHtml += "<td>";
                     tableHtml += "<div class='form-group'>";
                     tableHtml += "<label>Họ tên</label>";
                     tableHtml += "<input type='text' class='form-control' name='fullName[]'>";
+                    tableHtml += `<p id='${idFullname}' class='errorMessage'></p>`
                     tableHtml += "</div>";
                     tableHtml += "</td>";
 
@@ -230,11 +241,14 @@
                     tableHtml += "<div class='form-group'>";
                     tableHtml += "<label>Giới tính</label>";
                     tableHtml += "<select class='form-control' name='gender[]'>";
-                    tableHtml += "<option value='1'>Nam</option> <option value='0'>Nữ</option>";
+                    tableHtml += "<option value='0' selected>Nữ</option> <option value='1'>Nam</option>";
                     tableHtml += "</select>";
                     tableHtml += "</div>";
                     tableHtml += "</td>";
 
+                    let idDay = "dayErr" + (i+1).toString();
+                    let idMonth = "monthErr" + (i+1).toString();
+                    let idYear = "yearErr" + (i+1).toString();
 
                     tableHtml += "<td>";
                     tableHtml += "<div class='form-group'>";
@@ -247,6 +261,7 @@
                         tableHtml += `<option value='${day}'>${day}</option>`
                     }
                     tableHtml += "</select>";
+                    tableHtml += `<p id='${idDay}' class='errorMessage'></p>`
                     tableHtml += "</div>";
 
                     tableHtml += "<div class='col'>";
@@ -256,15 +271,17 @@
                         tableHtml += `<option value='${month}'>${month}</option>`;
                     }
                     tableHtml += "</select>";
+                    tableHtml += `<p id='${idMonth}' class='errorMessage'></p>`
                     tableHtml += "</div>";
 
                     tableHtml += "<div class='col'>";
-                    tableHtml += "<select class='form-control' name='years[]' onchange='calAge(this.value)'>";
+                    tableHtml += "<select class='form-control' name='years[]'>";
                     tableHtml += "<option>Năm</option>";
                     for(let year = currentYear; year >= currentYear-70; year--){
                         tableHtml += `<option value='${year}'>${year}</option>`;
                     }
                     tableHtml += "</select>";
+                    tableHtml += `<p id='${idYear}' class='errorMessage'></p>`
                     tableHtml += "</div>";
                     tableHtml += "</div>";
                     tableHtml += "</div>";
@@ -273,65 +290,26 @@
                     tableHtml += "<td>";
                     tableHtml += "<div class='form-group'>";
                     tableHtml += "<label>Phòng đơn</label>";
-                    tableHtml += "<select class='form-control' name='singleRoom[]' onchange='calRoomPrice(this.value)'>";
-                    tableHtml += "<option value='1'>Có</option> <option value='0' selected>Không</option>"
+                    tableHtml += "<select class='form-control' name='singleRoom[]'>";
+                    tableHtml += "<option value='0' selected>Không</option> <option value='1'>Có</option>"
                     tableHtml += "</select>"
                     tableHtml += "</div>";
                     tableHtml += "</td>";
 
                     tableHtml += "</tr>";
 
-                    // tableHtml += "<tr><td colspan='5'><label>Trị giá: </label> <p id='price'></p> </td></tr>";
                 }
                 tableHtml += "</tbody>";
                 tableHtml += "</table>";
 
-                tableHtml += "<table class='table table-bordered'><tr><td><label>Tổng cộng: </label> <p id='totalPrice'></p> </td></tr></table>";
-
-                tableHtml += "<input type='hidden' name='unitPrice' id='unitPrice'/>"
                 document.getElementById("listCustomers").innerHTML = tableHtml;
             }
-
-            function calAge(year){
-                let currentYear = new Date().getFullYear();
-                let age = currentYear - year;
-
-                let element = document.getElementById("price");
-
-                if(age >= 12){
-                    updateTotalPrice(tourPrice);
-                }
-                if(age < 12 && age >= 5){
-                    updateTotalPrice(tourPrice  * (75/100));
-                }
-                if(age < 5 && age >= 2){
-                    updateTotalPrice(tourPrice  * (50/100));
-                }
-                if(age < 2 && age > 0){
-                    updateTotalPrice(tourPrice  * (25/100));
-                }
-            }
-
-            function calRoomPrice(isChooseSingleRoom){
-                if(isChooseSingleRoom == 1){
-                    updateTotalPrice(surchargePrice);
-                }
-            }
-
-            function updateTotalPrice(price){
-                total += price;
-                // console.log(total);
-                let element = document.getElementById("totalPrice");
-                if(total != 0 && element != null){
-                    document.getElementById("totalPrice").innerHTML = total.toString().replace(/(?=(.{3})+$)/gm, ".") + " đ";
-                    document.getElementById("unitPrice").setAttribute("value", total);
-                }
-            }
         </script>
+
         <!--Start list of Customers information part-->
         <div id="listCustomers"></div>
         <!--End list of Customers information part-->
-        {{/each}}
+
         <!-- Submit Button  -->
 		<div class="form-group row">
 			<div class="col-md-9">

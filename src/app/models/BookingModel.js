@@ -11,9 +11,9 @@ class BookingModel{
         con.query(sql, callback);
     }
 
-    submitInvoiceInfo(con, data, datetime, callback){
+    submitInvoiceInfo(con, unitPrice, datetime, callback){
         // sql statement
-        let sql = "INSERT INTO invoice (unit_price, invoice_date) VALUES ('"+parseInt(data.unitPrice)+"', '"+datetime+"');";
+        let sql = "INSERT INTO invoice (unit_price, invoice_date) VALUES ('"+unitPrice+"', '"+datetime+"');";
         // execute sql statement
         con.query(sql, callback);
     }

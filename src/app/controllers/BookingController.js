@@ -10,11 +10,14 @@ class BookingController{
             if(err) throw err;
             let tourInfo = results[0];
             let destInfo = results[1];
+
             // format price and surcharge to display
-            tourInfo[0]['tour_price'] = tourInfo[0]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
-            tourInfo[0]['tour_surcharge'] = tourInfo[0]['tour_surcharge'].toString().replace(/(?=(.{3})+$)/gm, ".");
+            tourInfo[0]['tour_price'] = tourInfo[0]['tour_price'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            tourInfo[0]['tour_surcharge'] = tourInfo[0]['tour_surcharge'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
             // format date to display
-            tourInfo[0]['tour_date_go'] = tourInfo[0]['tour_date_go'].getDate() + "/" + (tourInfo[0]['tour_date_go'].getMonth()+1) + "/" + tourInfo[0]['tour_date_go'].getFullYear();
+            tourInfo[0]['tour_date_go'] = tourInfo[0]['tour_date_go'].getDate() + "/" + (tourInfo[0]['tour_date_go'].getMonth()+1)
+                                        + "/" + tourInfo[0]['tour_date_go'].getFullYear();
 
             res.render('booking', {layout: 'user_base_page', title: 'Đặt tour', tourInfo, destInfo});
         });
@@ -23,12 +26,43 @@ class BookingController{
     addInvoiceInfo(req, res, next){
         let con = req.con;
         let data = req.body;
+        // console.log(data);
         let today = new Date();
-        let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        let datetime = date + " " + time;
+        let datetime = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate() + " " +
+                        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-        bookingModel.submitInvoiceInfo(con, data, datetime, function(err, results){
+        let tourPrice = parseInt(data.tourPrice.split(".").join(""));
+        let tourSurcharge = parseInt(data.tourSurcharge.split(".").join(""));
+
+        // console.log(tourPrice);
+        // console.log(tourSurcharge);
+
+        let currentYear = new Date().getFullYear();
+        let years = data.years;
+        let rooms = data.singleRoom;
+        let unitPrice = 0;
+
+        for(let i = 0; i < years.length; i++){
+            let year = parseInt(years[i]);
+            let room = parseInt(rooms[i]);
+            let age = currentYear - year;
+
+            if(age >= 12)
+                unitPrice += tourPrice;
+            else if(age < 12 && age >= 5)
+                unitPrice += (tourPrice * (75/100));
+            else if(age < 5 && age >= 2)
+                unitPrice += (tourPrice * (50/100));
+            else if(age < 2 && age > 0)
+                unitPrice += (tourPrice * (25/100));
+
+            if(room == 1)
+                unitPrice += tourSurcharge;
+        }
+
+        // console.log(unitPrice);
+
+        bookingModel.submitInvoiceInfo(con, unitPrice, datetime, function(err, results){
             if (err) throw err;
             next();
         });
