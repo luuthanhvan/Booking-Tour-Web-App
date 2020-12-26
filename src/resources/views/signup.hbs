@@ -1,5 +1,6 @@
 <div class="container-sm">
-    <form name="signupForm" action="/sign-up" method="POST" onsubmit="return validateSignupForm()">
+    <!-- onsubmit="return validateSignupForm()" -->
+    <form name="signupForm" action="/sign-up/handleSignup" method="POST" onsubmit="return validateSignupForm()">
         <div class="row">
             <div class="col">
                 <div class="form-group">
@@ -105,6 +106,9 @@
                 document.getElementById("selectYear").innerHTML = optionsYear;
             </script>
         </div>
+
+        <!-- user account: role = 0  ==== admin account: role = 1 -->
+        <input type="hidden" name="role" value="0"/>
 
         <input class="btn btn-primary" type="submit" value="Đăng ký"/>
     </form>

@@ -1,3 +1,31 @@
+a:hover {
+    opacity: .8
+}
+
+a {
+    color: #1f1f1f;
+    text-decoration: none;
+    outline: none;
+}
+
+a, .btn {
+    text-decoration: none !important;
+    outline: none !important;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+
+.btn-custom {
+    margin-top: 20px;
+    background-color: transparent !important;
+    border: 2px solid #ddd;
+    padding: 12px 40px;
+    font-size: 18px;
+}
+
 /*------------------------------------------------------------------
     HEADER
 -------------------------------------------------------------------*/
@@ -17,8 +45,8 @@
 
 .top-navbar .navbar-light .navbar-nav .nav-link{
 	color: #010101;
-	font-size: 18px;
-	padding: 0px 20px;
+	font-size: 16px;
+	padding: 5px 20px;
 	border-radius: 4px;
 }
 

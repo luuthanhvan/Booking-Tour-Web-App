@@ -2,6 +2,7 @@ const bookingModel = require('../models/BookingModel');
 
 class BookingController{
     index(req, res){
+        // console.log("Booking: ", req.session);
         let con = req.con;
         // tourId is a string like 'tour1' so I need remove ''
         let tourId = req.query.tourId.slice(1, req.query.tourId.length-1);

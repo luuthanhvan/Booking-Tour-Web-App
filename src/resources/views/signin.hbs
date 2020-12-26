@@ -1,15 +1,74 @@
 <div class="container-sm">
-    <form name="signinForm" action="#" method="POST">
+    <form name="signinForm" id="signinForm" action="/sign-in/handleSignin" method="POST" onsubmit="return validateSigninForm()">
         <div class="form-group">
             <label>Tên đăng nhập</label>
-            <input class="form-control" type="text" />
+            <input class="form-control" type="text" name="username" onchange="return existedUser(this.value)"/>
+            <p id="usernameErr" class="errorMessage"></p>
+            <p id="usernameDidNotExist" class="errorMessage"></p>
         </div>
 
         <div class="form-group">
             <label>Mật khẩu</label>
-            <input class="form-control" type="text" />
+            <input class="form-control" type="password" name="password"/>
+            <p id="passwordErr" class="errorMessage"></p>
+            <p id="invalidPasswd" class="errorMessage"></p>
         </div>
 
         <input class="btn btn-primary" type="submit" value="Đăng nhập"/>
     </form>
+
+    <script>
+        var checked = false;
+
+        function validateSigninForm(){
+            let username = document.forms["signinForm"]["username"].value;
+            let password = document.forms["signinForm"]["password"].value;
+
+            if(username.length == 0){
+                document.getElementById("usernameErr").innerHTML = "* Trường Tên đăng nhập không được bỏ trống.";
+                checked = true;
+            }
+
+            if(password.length == 0){
+                document.getElementById("passwordErr").innerHTML = "* Trường Mật khẩu không được bỏ trống.";
+                checked = true;
+            }
+
+            return !checked;
+        }
+
+        function existedUser(username){
+            if(username.length == 0){
+                document.getElementById("usernameDidNotExist").innerHTML = "";
+                return false;
+            }
+
+            var xmlHTTP;
+            if(window.XMLHttpRequest){ // code for modern browsers: IE7+, Firefox, Chrome, Opera, Safari
+                xmlHTTP = new XMLHttpRequest();
+            }
+            else{ // code for old IE browsers: IE5, IE6
+                xmlHTTP = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            xmlHTTP.onreadystatechange = function(){
+                if(xmlHTTP.readyState == 4 && xmlHTTP.status == 200){
+                    console.log(xmlHTTP.responseText);
+                    document.getElementById("usernameDidNotExist").innerHTML = xmlHTTP.responseText;
+                    if(xmlHTTP.responseText.length != 0){
+						console.log("Error!!");
+						checked = true;
+					}
+					else{
+						checked = false;
+					}
+                }
+            }
+            xmlHTTP.open("POST", `/handleExistedUser?username=${username}`, true);
+            xmlHTTP.send();
+
+            return !checked;
+        }
+    </script>
+
 </div>

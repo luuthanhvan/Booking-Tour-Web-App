@@ -1,8 +1,10 @@
 const siteModel = require('../models/SiteModel');
+const md5 = require('md5');
 
 class SiteController{
     index(req, res){
-        let con = req.con;
+        // console.log("Home: ", req.session);
+        const con = req.con;
         siteModel.getTour(con, function(err, results){
             if(err) throw err;
             let tourInfo = results.length == 0 ? [] : results;
@@ -20,6 +22,7 @@ class SiteController{
     }
 
     seeDetails(req, res){
+        // console.log("Tour details: ", req.session);
         let con = req.con;
         let tourId = req.query.tourId;
         siteModel.getDetailedTourInfo(con, tourId, function(err, results){
@@ -51,18 +54,98 @@ class SiteController{
         });
     }
 
-    signUp(req, res){
+    diplaySignupPage(req, res){
         res.render('signup', {layout: 'user_base_page', title: 'Đăng ký'});
     }
 
-    addCustomerInfo(req, res){
+    addCustomerInfo(req, res, next){
+        const con = req.con;
         let data = req.body;
-        console.log(data);
-        res.redirect('signup');
+        // console.log(data);
+        siteModel.submitCustomerInfo(con, data, function(err, results){
+            if (err) throw err;
+            next();
+        });
     }
 
-    signIn(req, res){
+    addAccountInfo(req, res){
+        const con = req.con;
+        let username = req.body.username;
+        // console.log(req.body.password1);
+        let encryptedPasswd = md5(req.body.password1);
+        // console.log(encryptedPasswd);
+
+        siteModel.submitAccountInfo(con, username, encryptedPasswd, req.body.role, function(err, results){
+            if (err) throw err;
+            res.redirect('/sign-up');
+            // res.render('temp', {layout: 'user_base_page', title: 'Temp page'});
+        });
+    }
+
+    displaySigninPage(req, res){
         res.render('signin', {layout: 'user_base_page', title: 'Đăng nhập'});
+    }
+
+    existedUser(req, res){
+        const con = req.con;
+        let username = req.query.username;
+        // console.log(username);
+        siteModel.getAccountInfoByUsername(con, username, function(err, result){
+            if (err) throw err;
+            let accountInfo = result.length == 0 ? [] : result;
+            if (accountInfo.length == 0){
+                res.send("Tài khoản không tồn tại!");
+            }
+            else {
+                res.send("");
+            }
+        });
+    }
+
+    invalidPassword(req, res, next){
+        const con = req.con;
+        let username = req.body.username;
+        let encryptedPasswd = md5(req.body.password);
+
+        siteModel.getAccountInfo(con, username, encryptedPasswd, function(err, result){
+            if (err) throw err;
+
+            let accountInfo = result.length == 0 ? [] : result;
+            // console.log(accountInfo);
+
+            if(accountInfo.length > 0){
+                next();
+            }
+            else{
+                res.send("Mật khẩu không đúng!");
+            }
+        });
+    }
+
+    setSession(req, res, next){
+        const con = req.con;
+        let username = req.body.username;
+        siteModel.getAccountInfoByUsername(con, username, function(err, result){
+            if (err) throw err;
+            let accountInfo = result.length == 0 ? [] : result;
+            // set session
+            req.session.user = {
+                username: accountInfo[0]['username'],
+                role: accountInfo[0]['role'],
+            };
+            next();
+        });
+    }
+
+    signin(req, res){
+        // console.log(req.session);
+        let userRole = req.session.user.role;
+        if(userRole == 1){ // admin
+            res.redirect("/manage");
+        }
+        else{ // customer
+            res.redirect("/");
+        }
     }
 }
 

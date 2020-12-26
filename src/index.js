@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const path = require('path');
 const express = require('express');
 const exphbs = require('express-handlebars');
+const session = require('express-session');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -25,6 +26,13 @@ app.use(
     }),
 );
 app.use(express.json());
+
+/* Use the session middleware */
+app.use(session({
+    secret: 'secret-key',
+    resave: true,
+    saveUninitialized: true,
+}));
 
 /* Template engine */
 app.engine('.hbs', exphbs({
