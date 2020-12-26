@@ -8,6 +8,15 @@ class SiteModel{
         con.query(sql, callback);
     }
 
+    getTourInfoByDestAddress(con, destAddress, callback){
+        // sql statement
+        let sql = "SELECT tour.tour_id, tour.tour_name, tour.tour_price, dest_image FROM tour, tourist_destination, tour_details WHERE tour.tour_id=tour_details.tour_id " +
+                "AND tour_details.dest_id=tourist_destination.dest_id AND tourist_destination.dest_address='"+destAddress+"';"
+
+        // execute sql statement
+        con.query(sql, callback);
+    }
+
     getDetailedTourInfo(con, data, callback){
         // data is a string like 'tour1' so I need remove ''
         let tourId = data.slice(1,data.length-1);

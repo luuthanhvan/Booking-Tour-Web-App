@@ -39,16 +39,19 @@ class SiteController{
 
     searchTour(req, res){
         const con = req.con;
-        siteModel.getTour(con, function(err, results){
-            if(err) throw err;
-            let tourInfo = results[0].length == 0 ? [] : results[0];
-            if(tourInfo.length != 0 && results[1].length != 0){
-                // append data got from the second sql to the tourInfo array
-                Object.assign(tourInfo[0], results[1][0]);
-                // format price to display
-                tourInfo[0]['tour_price'] = tourInfo[0]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
-            }
+        let destAddress = req.body.destAddress;
 
+        siteModel.getTourInfoByDestAddress(con, destAddress, function(err, result){
+            if(err) throw err;
+
+            let tourInfo = result.length == 0 ? [] : result;
+
+            if(tourInfo.length != 0){
+                for(let i = 0; i < tourInfo.length; i++){
+                    // format price to display
+                    tourInfo[i]['tour_price'] = tourInfo[i]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
+                }
+            }
             // console.log(tourInfo);
             res.render('results', {layout: 'user_base_page', title: 'Kết quả tìm kiếm', tourInfo});
         });
