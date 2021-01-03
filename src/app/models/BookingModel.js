@@ -1,6 +1,6 @@
 class BookingModel{
-    getTour(con, tourId, callback){
-        // sql statements
+    getTourInfoById(con, tourId, callback){
+        // sql statements to get tour information by tour_id
         let sql = "SELECT * FROM tour WHERE tour_id='"+tourId+"';";
         sql += "SELECT tourist_destination.dest_name, tourist_destination.dest_image " +
                 "FROM tourist_destination, tour_details " +
@@ -12,8 +12,9 @@ class BookingModel{
     }
 
     submitInvoiceInfo(con, unitPrice, datetime, callback){
-        // sql statement
+        // sql statement to insert invoice information into invoice table
         let sql = "INSERT INTO invoice (unit_price, invoice_date) VALUES ('"+unitPrice+"', '"+datetime+"');";
+
         // execute sql statement
         con.query(sql, callback);
     }
@@ -39,7 +40,7 @@ class BookingModel{
         con.query(sql, callback);
     }
 
-    getBookingInfo(con, tourId, callback){
+    getBookingInfoById(con, tourId, callback){
         // sql statement
         // get main customer info
         let sql = "SELECT * FROM customer WHERE customer.customer_id=(SELECT MIN(customer.customer_id) "+
@@ -48,24 +49,10 @@ class BookingModel{
         sql += "SELECT * FROM (ticket INNER JOIN customer on customer.customer_id=ticket.customer_id) " +
                 "INNER JOIN invoice ON ticket.invoice_id=invoice.invoice_id " +
                 "WHERE invoice.invoice_id=(SELECT MAX(invoice_id) FROM invoice);";
+
         // execute sql statement
         con.query(sql, callback);
     }
-
-    /*
-    getInfo(con, callback){
-        // sql statements
-        // get main customer info
-        let sql = "SELECT * FROM customer WHERE customer.customer_id=(SELECT MIN(customer.customer_id) "+
-        "FROM customer, ticket WHERE customer.customer_id=ticket.customer_id AND ticket.tour_id='tour_0001');";
-        sql += "SELECT * FROM tour WHERE tour_id='tour_0001';";
-        sql += "SELECT * FROM (ticket INNER JOIN customer on customer.customer_id=ticket.customer_id) " +
-                "INNER JOIN invoice ON ticket.invoice_id=invoice.invoice_id " +
-                "WHERE invoice.invoice_id=(SELECT MAX(invoice_id) FROM invoice);";
-
-        // execute sql statements
-        con.query(sql, callback);
-    }*/
 }
 
 module.exports = new BookingModel();

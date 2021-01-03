@@ -1,19 +1,17 @@
+const helperFunctions = require('../../utilities/helper_functions');
 const siteModel = require('../models/SiteModel');
 const md5 = require('md5');
 
 class SiteController{
     index(req, res){
-        // console.log("Home: ", req.session);
         const con = req.con;
         siteModel.getTour(con, function(err, results){
             if(err) throw err;
             let tourInfo = results.length == 0 ? [] : results;
-            // console.log(tourInfo);
-
             // format tour price before send it to client
             if(tourInfo.length != 0){
                 for(let i = 0; i < tourInfo.length; i++){
-                    tourInfo[i]['tour_price'] = tourInfo[i]['tour_price'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    tourInfo[i]['tour_price'] = helperFunctions.formatPriceToDisplay(tourInfo[i]['tour_price']);
                 }
             }
 
@@ -23,17 +21,21 @@ class SiteController{
 
     seeDetails(req, res){
         // console.log("Tour details: ", req.session);
-        let con = req.con;
-        let tourId = req.query.tourId;
-        siteModel.getDetailedTourInfo(con, tourId, function(err, results){
+        const con = req.con;
+
+        // tourId is a string like 'tour1' so I need remove ''
+        let tourId = req.query.tourId.slice(1, req.query.tourId.length-1);
+
+        siteModel.getTourInfoById(con, tourId, function(err, results){
             if(err) throw err;
             let tourInfo = results[0];
             let destInfo = results[1];
-            // format price to display
-            tourInfo[0]['tour_price'] = tourInfo[0]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
-            // format date to displat
-            tourInfo[0]['tour_date_go'] = tourInfo[0]['tour_date_go'].getDate() + "/" + (tourInfo[0]['tour_date_go'].getMonth()+1) + "/" + tourInfo[0]['tour_date_go'].getFullYear();
-            res.render('tourDetails', {layout: 'user_base_page', title: tourInfo[0]['tour_name'], tourInfo, destInfo});
+
+            // format tour price and tour date go before send it to client
+            tourInfo[0]['tour_price'] = helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_price']);
+            tourInfo[0]['tour_date_go'] = helperFunctions.formatDateToDisplay(tourInfo[0]['tour_date_go']);
+
+            res.render('tour_details', {layout: 'user_base_page', title: tourInfo[0]['tour_name'], tourInfo, destInfo});
         });
     }
 
@@ -48,11 +50,11 @@ class SiteController{
 
             if(tourInfo.length != 0){
                 for(let i = 0; i < tourInfo.length; i++){
-                    // format price to display
-                    tourInfo[i]['tour_price'] = tourInfo[i]['tour_price'].toString().replace(/(?=(.{3})+$)/gm, ".");
+                    // format tour price before send it to client
+                    tourInfo[i]['tour_price'] = helperFunctions.formatPriceToDisplay(tourInfo[i]['tour_price']);
                 }
             }
-            // console.log(tourInfo);
+
             res.render('results', {layout: 'user_base_page', title: 'Kết quả tìm kiếm', tourInfo});
         });
     }
@@ -64,7 +66,6 @@ class SiteController{
     addCustomerInfo(req, res, next){
         const con = req.con;
         let data = req.body;
-        // console.log(data);
         siteModel.submitCustomerInfo(con, data, function(err, results){
             if (err) throw err;
             next();
@@ -74,14 +75,12 @@ class SiteController{
     addAccountInfo(req, res){
         const con = req.con;
         let username = req.body.username;
-        // console.log(req.body.password1);
+        // encrypt password before insert it to database
         let encryptedPasswd = md5(req.body.password1);
-        // console.log(encryptedPasswd);
 
         siteModel.submitAccountInfo(con, username, encryptedPasswd, req.body.role, function(err, results){
             if (err) throw err;
             res.redirect('/sign-up');
-            // res.render('temp', {layout: 'user_base_page', title: 'Temp page'});
         });
     }
 
@@ -92,7 +91,7 @@ class SiteController{
     existedUser(req, res){
         const con = req.con;
         let username = req.query.username;
-        // console.log(username);
+
         siteModel.getAccountInfoByUsername(con, username, function(err, result){
             if (err) throw err;
             let accountInfo = result.length == 0 ? [] : result;
@@ -114,7 +113,6 @@ class SiteController{
             if (err) throw err;
 
             let accountInfo = result.length == 0 ? [] : result;
-            // console.log(accountInfo);
 
             if(accountInfo.length > 0){
                 next();
@@ -141,7 +139,6 @@ class SiteController{
     }
 
     signin(req, res){
-        // console.log(req.session);
         let userRole = req.session.user.role;
         if(userRole == 1){ // admin
             res.redirect("/manage");

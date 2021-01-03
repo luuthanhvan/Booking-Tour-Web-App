@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(session({
     secret: 'secret-key',
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
 }));
 
 /* Template engine */
