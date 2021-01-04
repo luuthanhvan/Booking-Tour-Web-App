@@ -2,7 +2,7 @@ class SiteModel{
     getTour(con, callback) {
         // sql statement to get all tour information from tour, tour_details and tourist_destination tables group by tour_id
         let sql = "SELECT tour.tour_id, tour_name, tour_price, dest_image FROM tour, tour_details, tourist_destination WHERE tour.tour_id=tour_details.tour_id " +
-        "AND tour_details.dest_id=tourist_destination.dest_id GROUP BY tour.tour_id;";
+        "AND tour_details.dest_id=tourist_destination.dest_id AND tour.tour_status=1 GROUP BY tour.tour_id;";
 
         // execute sql statement
         con.query(sql, callback);
@@ -10,8 +10,8 @@ class SiteModel{
 
     getTourInfoByDestAddress(con, destAddress, callback){
         // sql statement to get tour information by dest_address
-        let sql = "SELECT tour.tour_id, tour.tour_name, tour.tour_price, dest_image FROM tour, tourist_destination, tour_details WHERE tour.tour_id=tour_details.tour_id " +
-                "AND tour_details.dest_id=tourist_destination.dest_id AND tourist_destination.dest_address='"+destAddress+"';"
+        let sql = "SELECT tour.tour_id, tour.tour_name, tour.tour_price, tourist_destination.dest_image FROM tour, tourist_destination, tour_details WHERE tour.tour_id=tour_details.tour_id " +
+                "AND tour_details.dest_id=tourist_destination.dest_id AND tourist_destination.dest_address='"+destAddress+"' GROUP BY tour.tour_id;";
 
         // execute sql statement
         con.query(sql, callback);

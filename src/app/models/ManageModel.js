@@ -31,29 +31,21 @@ class ManageModel{
         con.query(sql, callback);
     }
 
-    deleteTourByTourIds(con, tourIds, callback){
-        // if only one tour selected
-        if(!tourIds.includes(",")){
-            // tourIds is a string like 'tour1' so I need remove ''
-            let tourId = tourIds.slice(1, tourIds.length-1);
+    getTicketInfoByTourId(con, tourId, callback){
+        // sql statement to get a tour information
+        let sql = "SELECT * FROM ticket WHERE tour_id='"+tourId+"';";
 
-            // sql statement to delete a tour
-            let sql =  "DELETE FROM tour_details WHERE tour_id='"+tourId+"';";
-            sql += "DELETE FROM tour WHERE tour_id='"+tourId+"';";
+        // execute sql statement
+        con.query(sql, callback);
+    }
 
-            con.query(sql, callback);
-        }
-        else{ // multiple tours selected
-            let tours = tourIds.split(",");
-            tours[0] = tours[0].replace("'", "");
-            tours[tours.length-1] = tours[tours.length-1].replace("'", "");
+    deleteTourByTourId(con, tourId, callback){
+        // sql statement to delete a tour
+        let sql =  "DELETE FROM tour_details WHERE tour_id='"+tourId+"';";
+        sql += "DELETE FROM tour WHERE tour_id='"+tourId+"';";
 
-            // sql statement to delete multiple tour information
-            let sql = "DELETE FROM tour_details WHERE tour_id IN (?);";
-            sql += "DELETE FROM tour WHERE tour_id IN (?);";
-
-            con.query(sql, [tours, tours], callback);
-        }
+        // execute sql statements
+        con.query(sql, callback);
     }
 
     editTourById(con, tourId, callback){
@@ -134,6 +126,24 @@ class ManageModel{
     updateDest(con, data, path, callback){
         // sql statement to update tourist destination information by dest_id
         let sql = "UPDATE tourist_destination SET dest_name='"+data.destName+"', dest_address='"+data.destAddress+"', dest_image='"+path+"' WHERE dest_id='"+data.destId+"';";
+
+        // execute sql statement
+        con.query(sql, callback);
+    }
+
+    getAllTourBookingInfo(con, callback){
+        let sql = "SELECT tour.tour_id, tour.tour_name, COUNT(tour.tour_id) as nbCustomers, tour.tour_date_go, tour.tour_max_customer FROM ticket, tour WHERE ticket.tour_id=tour.tour_id;";
+
+        // execute sql statement
+        con.query(sql, callback);
+    }
+
+    getTourBookingDetailsById(con, tourId, callback){
+        let sql = "SELECT customer.customer_name, customer.customer_gender, customer.customer_dob, customer.customer_phone, customer.customer_address, " +
+        "customer.customer_note, customer.booking_single_room, invoice.booking_date FROM ticket, customer, invoice WHERE ticket.customer_id=customer.customer_id " +
+        "AND ticket.invoice_id=invoice.invoice_id AND ticket.tour_id='"+tourId+"';";
+
+        sql += "SELECT tour_name, tour_price, tour_surcharge FROM tour WHERE tour_id='"+tourId+"';";
 
         // execute sql statement
         con.query(sql, callback);

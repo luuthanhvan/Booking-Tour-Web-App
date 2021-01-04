@@ -35,43 +35,6 @@ h2 {
     font-size: 22px
 }
 
-a:hover {
-    opacity: .8
-}
-
-a {
-    color: #1f1f1f;
-    text-decoration: none;
-    outline: none;
-}
-
-a, .btn {
-    text-decoration: none !important;
-    outline: none !important;
-    -webkit-transition: all .3s ease-in-out;
-    -moz-transition: all .3s ease-in-out;
-    -ms-transition: all .3s ease-in-out;
-    -o-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
-}
-
-.btn-custom {
-    margin-top: 20px;
-    background-color: transparent !important;
-    border: 2px solid #ddd;
-    padding: 12px 40px;
-    font-size: 16px;
-}
-
-button:focus {
-	outline: none;
-}
-
-.form-control::-moz-placeholder {
-    color: #2a2a2a;
-    opacity: 1;
-}
-
 /*------------------------------------------------------------------
     HEADER
 -------------------------------------------------------------------*/
@@ -170,8 +133,7 @@ button:focus {
 
 .btn-outline-new-white {
     color: #fff;
-    background-color: transparent;
-    background-image: none;
+    background-color: #cfa671;
     border-color: #cfa671;
 }
 
@@ -255,7 +217,7 @@ button:focus {
     box-shadow: 0 0 10px #ccc;
 }
 
-.why-text {
+.text {
     position: absolute;
     left: 0;
     bottom: -100%;
@@ -266,13 +228,14 @@ button:focus {
     -webkit-transition: all .3s ease;
     transition: all .3s ease;
 }
-.why-text h4{
+.text h4{
 	color: #ffffff;
-	font-size: 24px;
-	font-weight: 500;
+	font-size: 28px;
+	font-weight: 600;
 	font-family: 'Arbutus Slab', serif;
 }
-.why-text p{
+
+.text p{
 	color: #ffffff;
 	font-size: 18px;
 	border-bottom: 1px dashed #010101;
@@ -281,13 +244,8 @@ button:focus {
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
-.why-text h5{
-	font-size: 28px;
-	font-weight: 600;
-	color: #ffffff;
-}
 
-.gallery-single:hover .why-text{
+.gallery-single:hover .text{
 	bottom: 0px;
 }
 

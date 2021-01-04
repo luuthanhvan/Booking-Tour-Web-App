@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <h3>Danh sách các tour đã được đặt</h3>
+
+    <div class="table-wrapper-scroll-y dataGrid" id="dataGrid"></div>
+
+    <script>
+        let htmlTable = "<table class='table table-sm table-bordered table-striped table-hover mb-0'>";
+        htmlTable += "<thead>";
+        htmlTable += "<tr>";
+        htmlTable += "<th scope='col'>Mã tour</th>";
+        htmlTable += "<th scope='col'>Tên tour</th>";
+        htmlTable += "<th scope='col'>Khởi hành</th>";
+        htmlTable += "<th scope='col'>Số lượng khách đã đặt</th>";
+        htmlTable += "<th scope='col'>Số chỗ còn nhận thêm</th>";
+        htmlTable += "<th scope='col'>Xem chi tiết</th>";
+        htmlTable += "</tr>";
+        htmlTable += "</thead>";
+
+        htmlTable += "<tbody>";
+        {{#if tourBookingInfo.length}}
+            {{#each tourBookingInfo}}
+
+                htmlTable += "<tr>";
+                htmlTable += "<td>{{this.tour_id}}</td>";
+                htmlTable += "<td>{{this.tour_name}}</td>";
+                htmlTable += "<td>{{this.tour_date_go}}</td>";
+                htmlTable += "<td>{{this.nbCustomers}}</td>";
+                let nbSeats = {{this.tour_max_customer}} - {{this.nbCustomers}};
+                htmlTable += `<td>${nbSeats}</td>`;
+
+                let id = '{{this.tour_id}}';
+                htmlTable += `<td><a href='/manage/tourBooking/details?tourId=${id}'><img src='/images/details_icon.png' width='22' height='22'/></a></td>`
+                htmlTable += "</tr>";
+            {{/each}}
+        {{else}}
+            htmlTable += "<tr><td class='noData' colspan='14'>Không có dữ liệu</td></tr>";
+        {{/if}}
+        htmlTable += "</tbody>";
+        htmlTable += "</table>";
+
+        document.getElementById("dataGrid").innerHTML = htmlTable;
+    </script>
+</div>

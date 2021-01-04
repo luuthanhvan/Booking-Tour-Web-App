@@ -48,6 +48,8 @@ class SiteController{
 
             let tourInfo = result.length == 0 ? [] : result;
 
+            // console.log(result);
+
             if(tourInfo.length != 0){
                 for(let i = 0; i < tourInfo.length; i++){
                     // format tour price before send it to client
@@ -118,7 +120,7 @@ class SiteController{
                 next();
             }
             else{
-                res.send("Mật khẩu không đúng!");
+                res.send("<h1>Mật khẩu không đúng!</h1><button><a href='/sign-in'>Đăng nhập lại</a></button>");
             }
         });
     }

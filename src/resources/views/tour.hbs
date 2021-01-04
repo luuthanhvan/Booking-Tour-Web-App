@@ -142,6 +142,7 @@
         htmlTable += "<th scope='col'>Địa điểm tham quan</th>";
         htmlTable += "<th scope='col'>Số lượng khách tối đa</th>";
         htmlTable += "<th scope='col'>Số lượng khách tối thiểu</th>";
+        htmlTable += "<th scope='col'>Trạng thái</th>";
         htmlTable += "<th scope='col'>Mô tả</th>";
         htmlTable += "<th scope='col'>Chọn</th>";
         htmlTable += "</tr>";
@@ -168,6 +169,11 @@
                 htmlTable += "<td>{{this.destinationName}}</td>";
                 htmlTable += "<td>{{this.tour_max_customer}}</td>";
                 htmlTable += "<td>{{this.tour_min_customer}}</td>";
+
+                if({{this.tour_status}} == 1)
+                    htmlTable += '<td>Hiện</td>';
+                else htmlTable += '<td>Ẩn</td>';
+                
                 htmlTable += `<td>${htmlCode}</td>`;
 
                 id = '{{this.tour_id}}';

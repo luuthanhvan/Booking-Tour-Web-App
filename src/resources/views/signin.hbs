@@ -2,14 +2,14 @@
     <form name="signinForm" id="signinForm" action="/sign-in/handleSignin" method="POST" onsubmit="return validateSigninForm()">
         <div class="form-group">
             <label>Tên đăng nhập</label>
-            <input class="form-control" type="text" name="username" onchange="return existedUser(this.value)"/>
+            <input class="form-control col-6 col-md-4" type="text" name="username" onchange="return existedUser(this.value)"/>
             <p id="usernameErr" class="errorMessage"></p>
             <p id="usernameDidNotExist" class="errorMessage"></p>
         </div>
 
         <div class="form-group">
             <label>Mật khẩu</label>
-            <input class="form-control" type="password" name="password"/>
+            <input class="form-control col-6 col-md-4" type="password" name="password"/>
             <p id="passwordErr" class="errorMessage"></p>
             <p id="invalidPasswd" class="errorMessage"></p>
         </div>
@@ -37,6 +37,7 @@
             return !checked;
         }
 
+        // using ajax to communicate with server
         function existedUser(username){
             if(username.length == 0){
                 document.getElementById("usernameDidNotExist").innerHTML = "";

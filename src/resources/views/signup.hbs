@@ -1,5 +1,4 @@
 <div class="container-sm">
-    <!-- onsubmit="return validateSignupForm()" -->
     <form name="signupForm" action="/sign-up/handleSignup" method="POST" onsubmit="return validateSignupForm()">
         <div class="row">
             <div class="col">
@@ -109,7 +108,7 @@
 
         <!-- user account: role = 0  ==== admin account: role = 1 -->
         <input type="hidden" name="role" value="0"/>
-
+        
         <input class="btn btn-primary" type="submit" value="Đăng ký"/>
     </form>
 </div>

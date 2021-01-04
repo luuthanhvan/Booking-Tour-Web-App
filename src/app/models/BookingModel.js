@@ -13,7 +13,7 @@ class BookingModel{
 
     submitInvoiceInfo(con, unitPrice, datetime, callback){
         // sql statement to insert invoice information into invoice table
-        let sql = "INSERT INTO invoice (unit_price, invoice_date) VALUES ('"+unitPrice+"', '"+datetime+"');";
+        let sql = "INSERT INTO invoice (unit_price, booking_date) VALUES ('"+unitPrice+"', '"+datetime+"');";
 
         // execute sql statement
         con.query(sql, callback);

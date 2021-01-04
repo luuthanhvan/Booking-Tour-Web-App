@@ -1,0 +1,59 @@
+<div class="container-fluid">
+    <h3>Danh sách khách hàng đặt tour {{title}}</h3>
+
+    <div class="table-wrapper-scroll-y dataGrid" id="dataGrid"></div>
+
+    <script>
+        let htmlTable = "<table class='table table-sm table-bordered table-striped table-hover mb-0'>";
+        let price;
+        htmlTable += "<thead>";
+        htmlTable += "<tr>";
+        htmlTable += "<th scope='col'>Họ tên khách hàng</th>";
+        htmlTable += "<th scope='col'>Giới tính</th>";
+        htmlTable += "<th scope='col'>Ngày sinh</th>";
+        htmlTable += "<th scope='col'>Số điện thoại</th>";
+        htmlTable += "<th scope='col'>Địa chỉ liên hệ</th>";
+        htmlTable += "<th scope='col'>Ngày đặt</th>";
+        htmlTable += "<th scope='col'>Đặt phòng đơn</th>";
+        htmlTable += "<th scope='col'>Thành tiền</th>";
+        htmlTable += "<th scope='col'>Ghi chú</th>";
+        htmlTable += "<th scope='col'>Trạng thái</th>";
+        htmlTable += "</tr>";
+        htmlTable += "</thead>";
+
+        htmlTable += "<tbody>";
+        {{#if tourBookingDetails.length}}
+            {{#each tourBookingDetails}}
+
+                htmlTable += "<tr>";
+                htmlTable += "<td>{{this.customer_name}}</td>";
+                htmlTable += "<td>{{this.customer_gender}}</td>";
+                htmlTable += "<td>{{this.customer_dob}}</td>";
+                htmlTable += "<td>{{this.customer_phone}}</td>";
+                htmlTable += "<td>{{this.customer_address}}</td>";
+                htmlTable += "<td>{{this.booking_date}}</td>";
+
+                if({{this.booking_single_room}} == 0){
+                    htmlTable += "<td>Có</td>";
+                }
+                else{
+                    htmlTable += "<td>Không</td>";
+                }
+
+                htmlTable += "<td>{{this.price}}</td>";
+                htmlTable += "<td>{{this.customer_note}}</td>";
+                htmlTable += `<td>Chưa thanh toán</td>`;
+
+                htmlTable += "</tr>";
+            {{/each}}
+        {{else}}
+            htmlTable += "<tr><td class='noData' colspan='14'>Không có dữ liệu</td></tr>";
+        {{/if}}
+        htmlTable += "</tbody>";
+        htmlTable += "</table>";
+
+        document.getElementById("dataGrid").innerHTML = htmlTable;
+    </script>
+
+    <button class="btn btn-info" value="addTourAct">Trở về</button>
+</div>
