@@ -3,41 +3,67 @@ const bookingModel = require('../models/BookingModel');
 
 class BookingController{
     index(req, res){
-        // console.log("Booking: ", req.session);
         const con = req.con;
-        // tourId is a string like 'tour1' so I need remove ''
-        let tourId = req.query.tourId.slice(1, req.query.tourId.length-1);
+        if(req.session.user){
+            let username = req.session.user.username;
+            // tourId is a string like 'tour1' so I need remove ''
+            let tourId = req.query.tourId.slice(1, req.query.tourId.length-1);
 
-        // console.log(tourId);
-        bookingModel.getTourInfoById(con, tourId, function(err, results){
-            if(err) throw err;
-            let tourInfo = results[0];
-            let destInfo = results[1];
+            bookingModel.getCustomerInfoByUsername(con, username, function(err, result){
+                let customerInfo = result;
 
-            // format price before send it to client
-            tourInfo[0]['tour_price'] = helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_price']);
-            tourInfo[0]['tour_surcharge'] = helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_surcharge']);
+                customerInfo[0]['customer_dob'] = helperFunctions.formatDateToDisplay(customerInfo[0]['customer_dob']);
 
-            // format tour date go before send it to client
-            tourInfo[0]['tour_date_go'] = helperFunctions.formatDateToDisplay(tourInfo[0]['tour_date_go']);
+                bookingModel.getTourInfoById(con, tourId, function(err, results){
+                    if(err) throw err;
+                    let tourInfo = results[0];
+                    let destInfo = results[1];
 
-            res.render('booking', {layout: 'user_base_page', title: 'Đặt tour', tourInfo, destInfo});
-        });
+                    // format price before send it to client
+                    tourInfo[0]['tour_price'] = helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_price']);
+                    tourInfo[0]['tour_surcharge'] = helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_surcharge']);
+
+                    // format tour date go before send it to client
+                    tourInfo[0]['tour_date_go'] = helperFunctions.formatDateToDisplay(tourInfo[0]['tour_date_go']);
+
+                    res.render('booking', {layout: 'user_base_page', title: 'Đặt tour', tourInfo, destInfo, customerInfo});
+                });
+            });
+        }
+        else{
+            // tourId is a string like 'tour1' so I need remove ''
+            let tourId = req.query.tourId.slice(1, req.query.tourId.length-1);
+
+            bookingModel.getTourInfoById(con, tourId, function(err, results){
+                if(err) throw err;
+                let tourInfo = results[0];
+                let destInfo = results[1];
+
+                // format price before send it to client
+                tourInfo[0]['tour_price'] = helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_price']);
+                tourInfo[0]['tour_surcharge'] = helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_surcharge']);
+
+                // format tour date go before send it to client
+                tourInfo[0]['tour_date_go'] = helperFunctions.formatDateToDisplay(tourInfo[0]['tour_date_go']);
+
+                res.render('booking', {layout: 'user_base_page', title: 'Đặt tour', tourInfo, destInfo});
+            });
+        }
     }
 
-    addInvoiceInfo(req, res, next){
+    submitInvoiceInfo(req, res, next){
         const con = req.con;
         let data = req.body;
         let datetime = helperFunctions.getCurrentDatetime();
         let totalPrice = helperFunctions.calTotalPrice(data);
 
-        bookingModel.submitInvoiceInfo(con, totalPrice, datetime, function(err, results){
+        bookingModel.addInvoiceInfo(con, totalPrice, datetime, function(err, results){
             if (err) throw err;
             next();
         });
     }
 
-    addCustomersInfo(req, res, next){
+    submitCustomersInfoWithoutAccount(req, res, next){
         const con = req.con;
         let data = req.body;
         // console.log(data);
@@ -51,14 +77,14 @@ class BookingController{
               singleRoom: [ '1', '1', '1' ],
               note: 'test' }
         */
-        bookingModel.submitCustomersInfo(con, data, function(err, results){
+        bookingModel.addCustomersInfo(con, data, function(err, results){
             if (err) throw err;
             next();
         });
     }
 
     showBookingInfo(req, res){
-        let con = req.con;
+        const con = req.con;
         let tourId = req.body.tourId;
 
         bookingModel.getBookingInfoById(con, tourId, function(err, results){
@@ -67,8 +93,8 @@ class BookingController{
             let bookingInfo = results[2].length == 0 ? [] : results[2];
 
             // format date and time before send it to client
-            let date = helperFunctions.formatDateToDisplay(bookingInfo[0]['invoice_date']);
-            let time = helperFunctions.formatTimeToDisplay(bookingInfo[0]['invoice_date']);
+            let date = helperFunctions.formatDateToDisplay(bookingInfo[0]['booking_date']);
+            let time = helperFunctions.formatTimeToDisplay(bookingInfo[0]['booking_date']);
             let note = bookingInfo[0]['customer_note'];
 
             // format price before send it to client

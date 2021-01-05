@@ -98,82 +98,152 @@
     <h2>THÔNG TIN KHÁCH HÀNG</h2>
     <!--Start form /booking/bookingDetails -->
 	<form action="/booking/bookingDetails" name="bookingForm" method="POST" onsubmit="return validateBookingForm()">
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>Họ và tên</label>
-                    <input type="text" class="form-control" name="fullName[]">
-                    <p id="fullnameErr0" class="errorMessage"></p>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Số điện thoại</label>
-                    <input type="text" class="form-control" name="phoneNumber">
-                    <p id="phoneNumberErr" class="errorMessage"></p>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Giới tính</label>
-                    <select class="form-control" name="gender[]">
-                        <option value="0" selected>Nữ</option>
-                        <option value="1">Nam</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Địa chỉ</label>
-            <input type="text" class="form-control" name="address">
-            <p id="addressErr" class="errorMessage"></p>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <fieldset class="form-group">
-                    <legend class="col-form-label pt-0">Ngày sinh</legend>
-                    <div class="row">
-                        <div class="col" id="selectDay"></div>
-                        <div class="col" id="selectMonth"></div>
-                        <div class="col" id="selectYear"></div>
+        {{#if customerInfo.length}}
+            {{#each customerInfo}}
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Họ và tên</label>
+                            <input type="text" class="form-control" name="fullName[]" value="{{this.customer_name}}">
+                            <p id="fullnameErr0" class="errorMessage"></p>
+                        </div>
                     </div>
-                </fieldset>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input type="text" class="form-control" name="phoneNumber" value="{{this.customer_phone}}">
+                            <p id="phoneNumberErr" class="errorMessage"></p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Giới tính</label>
+                            <select class="form-control" id="gender" name="gender[]">
+                                <option value="0">Nữ</option>
+                                <option value="1">Nam</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input type="text" class="form-control" name="address" value="{{this.customer_address}}">
+                    <p id="addressErr" class="errorMessage"></p>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <fieldset class="form-group">
+                            <legend class="col-form-label pt-0">Ngày sinh</legend>
+                            <div class="row">
+                                <div class="col" id="selectDay"></div>
+                                <div class="col" id="selectMonth"></div>
+                                <div class="col" id="selectYear"></div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+            {{/each}}
+        {{else}}
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Họ và tên</label>
+                        <input type="text" class="form-control" name="fullName[]">
+                        <p id="fullnameErr0" class="errorMessage"></p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input type="text" class="form-control" name="phoneNumber">
+                        <p id="phoneNumberErr" class="errorMessage"></p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <select class="form-control" name="gender[]">
+                            <option value="0" selected>Nữ</option>
+                            <option value="1">Nam</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <!-- handle display list of days, months, years -->
-            <script>
-                let optionsDay = "<select class='form-control' name='days[]'>";
-                optionsDay += "<option>Ngày</option>";
-                for(let day = 1; day <= 31; day++){
-                    optionsDay += `<option value=${day}>${day}</option>`;
-                }
-                optionsDay += "</select>";
-                optionsDay += "<p id='dayErr0' class='errorMessage'></p>";
+            <div class="form-group">
+                <label>Địa chỉ</label>
+                <input type="text" class="form-control" name="address">
+                <p id="addressErr" class="errorMessage"></p>
+            </div>
 
-                let optionsMonth = "<select class='form-control' name='months[]'>";
-                optionsMonth += "<option>Tháng</option>";
-                for(let month = 1; month <= 12; month++){
-                    optionsMonth += `<option value=${month}>${month}</option>`;
-                }
-                optionsMonth += "</select>";
-                optionsMonth += "<p id='monthErr0' class='errorMessage'></p>";
+            <div class="row">
+                <div class="col-md-6">
+                    <fieldset class="form-group">
+                        <legend class="col-form-label pt-0">Ngày sinh</legend>
+                        <div class="row">
+                            <div class="col" id="selectDay"></div>
+                            <div class="col" id="selectMonth"></div>
+                            <div class="col" id="selectYear"></div>
+                        </div>
+                    </fieldset>
+                </div>
+        {{/if}}
 
-                let currentYear = new Date().getFullYear(); // get the current year
-                let optionsYear = "<select class='form-control' name='years[]'>";
-                optionsYear += "<option>Năm</option>";
-                for(let year = currentYear; year >= currentYear-70; year--){
-                    optionsYear += `<option value=${year}>${year}</option>`;
-                }
-                optionsYear += "</select>";
-                optionsYear += "<p id='yearErr0' class='errorMessage'></p>";
+        <!-- handle display list of days, months, years -->
+        <script>
+            let optionsDay = "<select class='form-control' id='day' name='days[]'>";
+            optionsDay += "<option>Ngày</option>";
+            for(let day = 1; day <= 31; day++){
+                optionsDay += `<option value=${day}>${day}</option>`;
+            }
+            optionsDay += "</select>";
+            optionsDay += "<p id='dayErr0' class='errorMessage'></p>";
 
-                document.getElementById("selectDay").innerHTML = optionsDay;
-                document.getElementById("selectMonth").innerHTML = optionsMonth;
-                document.getElementById("selectYear").innerHTML = optionsYear;
-            </script>
+            let optionsMonth = "<select class='form-control' id='month' name='months[]'>";
+            optionsMonth += "<option>Tháng</option>";
+            for(let month = 1; month <= 12; month++){
+                optionsMonth += `<option value=${month}>${month}</option>`;
+            }
+            optionsMonth += "</select>";
+            optionsMonth += "<p id='monthErr0' class='errorMessage'></p>";
 
+            let currentYear = new Date().getFullYear(); // get the current year
+            let optionsYear = "<select class='form-control' id='year' name='years[]'>";
+            optionsYear += "<option>Năm</option>";
+            for(let year = currentYear; year >= currentYear-70; year--){
+                optionsYear += `<option value=${year}>${year}</option>`;
+            }
+            optionsYear += "</select>";
+            optionsYear += "<p id='yearErr0' class='errorMessage'></p>";
+
+            document.getElementById("selectDay").innerHTML = optionsDay;
+            document.getElementById("selectMonth").innerHTML = optionsMonth;
+            document.getElementById("selectYear").innerHTML = optionsYear;
+        </script>
+
+        <script>
+            $(document).ready(function(){
+                let dob;
+                {{#if customerInfo.length}}
+                    {{#each customerInfo}}
+                        dob = '{{this.customer_dob}}'.split("/");
+
+                        $(`#day option[value=${dob[0]}]`).attr("selected", "selected");
+                        $(`#month option[value=${dob[1]}]`).attr("selected", "selected");
+                        $(`#year option[value=${dob[2]}]`).attr("selected", "selected");
+
+                        if({{this.customer_gender}} == 0)
+                            $("#gender option[value=0]").attr("selected", "selected");
+                        else $("#gender option[value=1]").attr("selected", "selected");
+
+                    {{/each}}
+                {{/if}}
+            });
+        </script>
+
+            <!-- continue div in line 135 or line 181-->
             <div class="col">
                 <div class="form-group">
                     <div class="row">
@@ -199,7 +269,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> <!-- end div line 135 or line 181 -->
 
         <div class="form-group">
             <label>Ghi chú</label>
@@ -207,9 +277,9 @@
         </div>
 
         {{#each tourInfo}}
-        <input type="hidden" name="tourId" value="{{this.tour_id}}"/>
-        <input type="hidden" name="tourPrice" value="{{this.tour_price}}"/>
-        <input type="hidden" name="tourSurcharge" value="{{this.tour_surcharge}}"/>
+            <input type="hidden" name="tourId" value="{{this.tour_id}}"/>
+            <input type="hidden" name="tourPrice" value="{{this.tour_price}}"/>
+            <input type="hidden" name="tourSurcharge" value="{{this.tour_surcharge}}"/>
         {{/each}}
 
         <!-- handle show form -->

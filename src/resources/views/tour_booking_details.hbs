@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <h3>Danh sách khách hàng đặt tour {{title}}</h3>
+    <h3>{{title}}</h3>
 
     <div class="table-wrapper-scroll-y dataGrid" id="dataGrid"></div>
 
@@ -17,7 +17,6 @@
         htmlTable += "<th scope='col'>Đặt phòng đơn</th>";
         htmlTable += "<th scope='col'>Thành tiền</th>";
         htmlTable += "<th scope='col'>Ghi chú</th>";
-        htmlTable += "<th scope='col'>Trạng thái</th>";
         htmlTable += "</tr>";
         htmlTable += "</thead>";
 
@@ -42,7 +41,6 @@
 
                 htmlTable += "<td>{{this.price}}</td>";
                 htmlTable += "<td>{{this.customer_note}}</td>";
-                htmlTable += `<td>Chưa thanh toán</td>`;
 
                 htmlTable += "</tr>";
             {{/each}}
@@ -52,8 +50,15 @@
         htmlTable += "</tbody>";
         htmlTable += "</table>";
 
+        htmlTable += "<button class='btn btn-info' id='btn-back'>Trở về</button>";
+
         document.getElementById("dataGrid").innerHTML = htmlTable;
     </script>
 
-    <button class="btn btn-info" value="addTourAct">Trở về</button>
+    <script>
+        // handling onclick event button
+        document.getElementById("btn-back").onclick = function () {
+            location.href = "/manage/tourBooking";
+        };
+    </script>
 </div>

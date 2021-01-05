@@ -17,7 +17,9 @@ router.post('/manage/dest/update', upload.single("destImg"), manageController.up
 
 router.get('/manage/tourBooking', manageController.tourBooking);
 router.get('/manage/tourBooking/details', manageController.tourBookingDetails);
+
 // router.get('/manage/post', manageController.post);
+// router.post('/manage/post/add', manageController.submitPost);
 
 router.get('/manage', manageController.index);
 

@@ -11,7 +11,15 @@ class BookingModel{
         con.query(sql, callback);
     }
 
-    submitInvoiceInfo(con, unitPrice, datetime, callback){
+    getCustomerInfoByUsername(con, username, callback){
+        let sql = "SELECT customer.customer_id, customer_name, customer_gender, customer_dob, customer_phone, customer_address " +
+            "FROM account, customer WHERE account.customer_id=customer.customer_id AND account.username='"+username+"'";
+
+        // execute sql statement
+        con.query(sql, callback);
+    }
+
+    addInvoiceInfo(con, unitPrice, datetime, callback){
         // sql statement to insert invoice information into invoice table
         let sql = "INSERT INTO invoice (unit_price, booking_date) VALUES ('"+unitPrice+"', '"+datetime+"');";
 
@@ -19,7 +27,7 @@ class BookingModel{
         con.query(sql, callback);
     }
 
-    submitCustomersInfo(con, data, callback){
+    addCustomersInfo(con, data, callback){
         let sql = "";
         // sql statements
         for(let i = 0; i < data.fullName.length; i++){

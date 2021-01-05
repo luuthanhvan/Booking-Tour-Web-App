@@ -131,8 +131,15 @@ class ManageModel{
         con.query(sql, callback);
     }
 
+    // addPost(con, data, callback){
+    //     let sql = "INSERT INTO post (post_title, post_content, post_status) VALUES ('"+data.postName+"', '"+data.content+"', '"+data.status+"');";
+    //
+    //     // execute sql statement
+    //     con.query(sql, callback);
+    // }
+
     getAllTourBookingInfo(con, callback){
-        let sql = "SELECT tour.tour_id, tour.tour_name, COUNT(tour.tour_id) as nbCustomers, tour.tour_date_go, tour.tour_max_customer FROM ticket, tour WHERE ticket.tour_id=tour.tour_id;";
+        let sql = "SELECT tour.tour_id, tour.tour_name, COUNT(tour.tour_id) as nbCustomers, tour.tour_date_go, tour.tour_max_customer FROM ticket, tour WHERE ticket.tour_id=tour.tour_id GROUP BY tour.tour_id;";
 
         // execute sql statement
         con.query(sql, callback);

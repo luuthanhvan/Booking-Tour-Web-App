@@ -4,6 +4,7 @@
     <div class="table-wrapper-scroll-y dataGrid" id="dataGrid"></div>
 
     <script>
+        let nbSeats, id;
         let htmlTable = "<table class='table table-sm table-bordered table-striped table-hover mb-0'>";
         htmlTable += "<thead>";
         htmlTable += "<tr>";
@@ -25,10 +26,10 @@
                 htmlTable += "<td>{{this.tour_name}}</td>";
                 htmlTable += "<td>{{this.tour_date_go}}</td>";
                 htmlTable += "<td>{{this.nbCustomers}}</td>";
-                let nbSeats = {{this.tour_max_customer}} - {{this.nbCustomers}};
+                nbSeats = {{this.tour_max_customer}} - {{this.nbCustomers}};
                 htmlTable += `<td>${nbSeats}</td>`;
 
-                let id = '{{this.tour_id}}';
+                id = '{{this.tour_id}}';
                 htmlTable += `<td><a href='/manage/tourBooking/details?tourId=${id}'><img src='/images/details_icon.png' width='22' height='22'/></a></td>`
                 htmlTable += "</tr>";
             {{/each}}

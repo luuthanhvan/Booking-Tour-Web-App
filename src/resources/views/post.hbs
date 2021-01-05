@@ -1,0 +1,140 @@
+<div class="container-fluid">
+    <h3>Bài viết</h3>
+    <form id="postForm" name="postForm">
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label>Tiêu đề</label>
+                <input type="text" class="form-control" id="postName" name="postName">
+                <p id="postNameErrorMessage" class="errorMessage"></p>
+            </div>
+
+            <div class="col">
+                <label>Trạng thái</label>
+                <div class="form-row">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="1" name="status" checked="checked">
+                        <label class="form-check-label">Hiện</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" value="0" name="status">
+                        <label class="form-check-label">Ẩn</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Nội dung</label>
+            <textarea id="summernote" name="content"></textarea>
+            <p id="contentErrorMessage" class="errorMessage"></p>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <div class="btn-group" role="group">
+                <button class="btn btn-info" value="addPostAct">Thêm</button>
+                <button class="btn btn-info" value="editPostAct">Sửa</button>
+                <button class="btn btn-info" value="deletePostAct">Xóa</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="table-wrapper-scroll-y dataGrid" id="dataGrid"></div>
+
+    <script>
+        let plainText, htmlCode, parser, id;
+
+        let htmlTable = "<table class='table table-sm table-bordered table-striped table-hover mb-0'>";
+        htmlTable += "<thead>";
+        htmlTable += "<tr>";
+        htmlTable += "<th scope='col'>Tiêu đề</th>";
+        htmlTable += "<th scope='col'>Nội dung</th>";
+        htmlTable += "<th scope='col'>Trạng thái</th>";
+        htmlTable += "<th scope='col'>Chọn</th>";
+        htmlTable += "</tr>";
+        htmlTable += "</thead>";
+
+        htmlTable += "<tbody>";
+        {{#if tourInfo.length}}
+            {{#each tourInfo}}
+                plainText = '{{this.tour_description}}';
+                parser = new DOMParser();
+                htmlCode = parser.parseFromString(plainText, "text/html");
+                htmlCode = htmlCode.body.outerText;
+
+                htmlTable += "<tr>";
+                htmlTable += "<th scope='row'>{{this.tour_id}}</th>";
+                htmlTable += "<td>{{this.tour_name}}</td>";
+                htmlTable += "<td>{{this.tour_price}}</td>";
+                htmlTable += `<td><input class='choosePost' type='checkbox' value='1'/></td>`
+                htmlTable += "</tr>";
+            {{/each}}
+        {{else}}
+            htmlTable += "<tr><td class='noData' colspan='14'>Không có dữ liệu</td></tr>";
+        {{/if}}
+        htmlTable += "</tbody>";
+        htmlTable += "</table>";
+
+        document.getElementById("dataGrid").innerHTML = htmlTable;
+    </script>
+
+
+    <script>
+        // get all tour id from checkbox (checked)
+        let posts = [];
+        let checkBoxsTour = document.querySelectorAll(".choosePost");
+        checkBoxsTour.forEach((item, i) => {
+            item.onclick = function(){
+                if(item.checked){
+                    // console.log(item.value);
+                    posts.push(item.value);
+                }
+            }
+        });
+
+        // using jquery to handle validation and submission form
+        $(document).ready(function(){
+            var checked = true;
+
+            function validationForm(){
+                let postNameVal = $("#postName").val();
+                let contentVal = $("#summernote").val();
+
+                if(postNameVal.length == 0){
+                    $("#postNameErrorMessage").show();
+                    $("#postNameErrorMessage").html("* Trường Tiêu đề không được bỏ trống.");
+                    checked = false;
+                }
+
+                if(contentVal.length == 0){
+                    $("#contentErrorMessage").show();
+                    $("#contentErrorMessage").html("* Trường Nội dung không được bỏ trống.");
+                    checked = false;
+                }
+            }
+
+            $("#postForm button").click(function(){
+                if($(this).attr("value") == "addPostAct"){
+                    validationForm();
+                    if(checked == true){
+                        $("#postForm").attr("method", "POST");
+                        $("#postForm").attr("action", "/manage/post/add");
+                        return true;
+                    }
+                    else {
+                        checked = true;
+                        return false;
+                    }
+                }
+                if($(this).attr("value") == "editPostAct"){
+                    $("#postForm").attr("method", "POST");
+                    $("#postForm").attr("action", "/manage/post/edit?id='"+posts+"'");
+                }
+                if($(this).attr("value") == "deleteTourAct"){
+                    $("#postForm").attr("method", "POST");
+                    $("#postForm").attr("action", "/manage/post/delete?id='"+posts+"'");
+                }
+            });
+        });
+
+    </script>
+</div>
