@@ -122,6 +122,7 @@
         </div>
     </form>
 
+    <h3>Thông tin Tour</h3>
     <div class="table-wrapper-scroll-y dataGrid" id="dataGrid"></div>
 
     <script>
@@ -173,7 +174,7 @@
                 if({{this.tour_status}} == 1)
                     htmlTable += '<td>Hiện</td>';
                 else htmlTable += '<td>Ẩn</td>';
-                
+
                 htmlTable += `<td>${htmlCode}</td>`;
 
                 id = '{{this.tour_id}}';

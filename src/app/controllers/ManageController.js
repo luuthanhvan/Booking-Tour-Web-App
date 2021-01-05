@@ -7,28 +7,28 @@ const signinMessage = "<h1>Vui lòng đăng nhập bằng tài khoản Admin!<h1
 class ManageController{
     /* Functions handler for Admin page */
     index(req, res){
-        // if(req.session.user){
-            // const userRole = req.session.user.role;
+        if(req.session.user){
+            const userRole = req.session.user.role;
 
-            // if(userRole == 1){ // admin
+            if(userRole == 1){ // admin
                 res.render('manage', {layout: 'admin_base_page', title: 'Admin'});
-            // }
-            // else{
-                // res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else{
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 
     /* Functions handler for Tour page */
     // get all tour and dest info and render tour page
     tour(req, res){
-        // if(req.session.user){
-        //     const userRole = req.session.user.role;
-        //
-        //     if(userRole == 1){ // admin
+        if(req.session.user){
+            const userRole = req.session.user.role;
+
+            if(userRole == 1){ // admin
                 const con = req.con;
                 manageModel.getTour(con, function(err, results, fields){
                     if(err) throw err;
@@ -62,24 +62,26 @@ class ManageController{
                         res.render('tour', {layout: 'admin_base_page', title: 'Tour', tourInfo, destInfo, destCity});
                     }
                 });
-            // }
-        //     else {
-        //         res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else {
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 
     submitTourInfo(req, res){
-        // if(req.session.user){
-        //     const userRole = req.session.user.role;
-        //
-        //     if(userRole == 1){ // admin
+        if(req.session.user){
+            const userRole = req.session.user.role;
+
+            if(userRole == 1){ // admin
                 const con = req.con;
                 // get data from form and pass it to addTour()
                 let data = req.body;
+
+                console.log(data);
 
                 // Processing: format date go, tour price, tour surcharge and tour description before insert it to database
                 data.dateGo = helperFunctions.formatDateToInsert(data.dateGo);
@@ -91,14 +93,14 @@ class ManageController{
                     if(err) throw err;
                     res.redirect('/manage/tour');
                 });
-        //     }
-        //     else{
-        //         res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else{
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 
     prepareToDetele(req, res, next){
@@ -162,10 +164,10 @@ class ManageController{
     }
 
     editTourInfo(req, res){
-        // if(req.session.user){
-        //     const userRole = req.session.user.role;
-        //
-        //     if(userRole == 1){ // admin
+        if(req.session.user){
+            const userRole = req.session.user.role;
+
+            if(userRole == 1){ // admin
                 const con = req.con;
                 let tourId = req.query.id;
                 if(tourId === "''"){
@@ -191,21 +193,21 @@ class ManageController{
                         res.render('editTour', {layout: 'admin_base_page', title: 'Chỉnh sửa Tour', destCity, tourInfo, destInfo});
                     });
                 }
-        //     }
-        //     else{
-        //         res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else{
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 
     updateTourInfo(req, res){
-        // if(req.session.user){
-        //     const userRole = req.session.user.role;
-        //
-        //     if(userRole == 1){ // admin
+        if(req.session.user){
+            const userRole = req.session.user.role;
+
+            if(userRole == 1){ // admin
                 const con = req.con;
                 let data = req.body;
 
@@ -218,58 +220,58 @@ class ManageController{
                     if(err) throw err;
                     res.redirect('/manage/tour');
                 });
-        //     }
-        //     else{
-        //         res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else{
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 
     /* Functions handler for Tourist Destination page */
     dest(req, res){
-        // if(req.session.user){
-        //     const userRole = req.session.user.role;
-        //
-        //     if(userRole == 1){ // admin
+        if(req.session.user){
+            const userRole = req.session.user.role;
+
+            if(userRole == 1){ // admin
                 const con = req.con;
                 manageModel.getDest(con, function(err, rows){
                     if(err) throw err;
                     let destInfo = rows.length == 0 ? [] : rows;
                     res.render('destination', {layout: 'admin_base_page', title: 'Địa điểm tham quan', destInfo});
                 });
-        //     }
-        //     else{
-        //         res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else{
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 
     submitDestInfo(req, res){
-        // if(req.session.user){
-        //     const userRole = req.session.user.role;
-        //
-        //     if(userRole == 1){ // admin
+        if(req.session.user){
+            const userRole = req.session.user.role;
+
+            if(userRole == 1){ // admin
                 const con = req.con;
-                const data = req.body;
+                let data = req.body;
                 const pathToImg = "/files_uploaded/"+req.file.filename;
                 manageModel.addDest(con, data, pathToImg, function(err){
                     if(err) throw err;
                     res.redirect('/manage/dest');
                 });
-        //     }
-        //     else{
-        //         res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else{
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 
     deleteDestInfo(req, res){
@@ -278,7 +280,7 @@ class ManageController{
 
             if(userRole == 1){ // admin
                 const con = req.con;
-                const destIds = req.query.id;
+                let destIds = req.query.id;
                 if(destIds === "''"){
                     res.send("<h1>Bạn chưa chọn địa điểm cần xóa.</h1><button><a href='/manage/dest'>Quay lại</a></button>");
                 }
@@ -377,10 +379,10 @@ class ManageController{
     // }
 
     tourBooking(req, res){
-        // if(req.session.user){
-        //     const userRole = req.session.user.role;
-        //
-        //     if(userRole == 1){ // admin
+        if(req.session.user){
+            const userRole = req.session.user.role;
+
+            if(userRole == 1){ // admin
                 const con = req.con;
                 manageModel.getAllTourBookingInfo(con, function(err, result){
                     if (err) throw err;
@@ -391,22 +393,22 @@ class ManageController{
 
                     res.render("tour_booking", {layout: 'admin_base_page', title: 'Quản lý đặt tour', tourBookingInfo});
                 });
-        //     }
-        //     else{
-        //         res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else{
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 
     tourBookingDetails(req, res){
         // console.log(req.query.tourId);
-        // if(req.session.user){
-        //     const userRole = req.session.user.role;
-        //
-        //     if(userRole == 1){ // admin
+        if(req.session.user){
+            const userRole = req.session.user.role;
+
+            if(userRole == 1){ // admin
                 const con = req.con;
                 let tourId = req.query.tourId;
 
@@ -431,14 +433,14 @@ class ManageController{
                     let title = 'Danh sách khách hàng đặt tour ' + tourInfo[0]['tour_name'];
                     res.render("tour_booking_details", {layout: 'admin_base_page', title, tourBookingDetails});
                 });
-        //     }
-        //     else{
-        //         res.send(signinMessage);
-        //     }
-        // }
-        // else{
-        //     res.status(403).send(errorMessage);
-        // }
+            }
+            else{
+                res.send(signinMessage);
+            }
+        }
+        else{
+            res.status(403).send(errorMessage);
+        }
     }
 }
 
