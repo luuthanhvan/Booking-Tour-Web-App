@@ -3,10 +3,11 @@ const router = express.Router();
 const siteController = require('../app/controllers/SiteController');
 
 router.get('/sign-up', siteController.diplaySignupPage);
+router.post('/handleExistedUser', siteController.existedUser);
 router.post('/sign-up/handleSignup', siteController.addCustomerInfo, siteController.addAccountInfo);
 
 router.get('/sign-in', siteController.displaySigninPage);
-router.post('/handleExistedUser', siteController.existedUser);
+router.post('/handleDidNotExistUser', siteController.didNotExistUser);
 router.post('/sign-in/handleSignin', siteController.invalidPassword, siteController.setSession, siteController.signin);
 
 router.get('/tourDetails', siteController.seeDetails)

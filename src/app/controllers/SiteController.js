@@ -65,6 +65,38 @@ class SiteController{
         res.render('signup', {layout: 'user_base_page', title: 'Đăng ký'});
     }
 
+    existedUser(req, res){
+        const con = req.con;
+        let username = req.query.username;
+
+        siteModel.getAccountInfoByUsername(con, username, function(err, result){
+            if (err) throw err;
+            let accountInfo = result.length == 0 ? [] : result;
+            if (accountInfo.length > 0){
+                res.send("Tài khoản đã tồn tại!");
+            }
+            else {
+                res.send("");
+            }
+        });
+    }
+
+    didNotExistUser(req, res){
+        const con = req.con;
+        let username = req.query.username;
+
+        siteModel.getAccountInfoByUsername(con, username, function(err, result){
+            if (err) throw err;
+            let accountInfo = result.length == 0 ? [] : result;
+            if (accountInfo.length == 0){
+                res.send("Tài khoản không tồn tại!");
+            }
+            else {
+                res.send("");
+            }
+        });
+    }
+
     addCustomerInfo(req, res, next){
         const con = req.con;
         let data = req.body;
@@ -88,22 +120,6 @@ class SiteController{
 
     displaySigninPage(req, res){
         res.render('signin', {layout: 'user_base_page', title: 'Đăng nhập'});
-    }
-
-    existedUser(req, res){
-        const con = req.con;
-        let username = req.query.username;
-
-        siteModel.getAccountInfoByUsername(con, username, function(err, result){
-            if (err) throw err;
-            let accountInfo = result.length == 0 ? [] : result;
-            if (accountInfo.length == 0){
-                res.send("Tài khoản không tồn tại!");
-            }
-            else {
-                res.send("");
-            }
-        });
     }
 
     invalidPassword(req, res, next){

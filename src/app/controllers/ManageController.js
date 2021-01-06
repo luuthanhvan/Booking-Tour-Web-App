@@ -81,7 +81,7 @@ class ManageController{
                 // get data from form and pass it to addTour()
                 let data = req.body;
 
-                console.log(data);
+                // console.log(data);
 
                 // Processing: format date go, tour price, tour surcharge and tour description before insert it to database
                 data.dateGo = helperFunctions.formatDateToInsert(data.dateGo);
