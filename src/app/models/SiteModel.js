@@ -11,7 +11,7 @@ class SiteModel{
     getTourInfoByDestAddress(con, destAddress, callback){
         // sql statement to get tour information by dest_address
         let sql = "SELECT tour.tour_id, tour.tour_name, tour.tour_price, tourist_destination.dest_image FROM tour, tourist_destination, tour_details WHERE tour.tour_id=tour_details.tour_id " +
-                "AND tour_details.dest_id=tourist_destination.dest_id AND tourist_destination.dest_address='"+destAddress+"' GROUP BY tour.tour_id;";
+                "AND tour_details.dest_id=tourist_destination.dest_id AND tourist_destination.dest_address='"+destAddress+"' GROUP BY tour_details.tour_id;";
 
         // execute sql statement
         con.query(sql, callback);
@@ -25,6 +25,7 @@ class SiteModel{
                 "WHERE tourist_destination.dest_id=tour_details.dest_id " +
                 "AND tour_details.tour_id='"+tourId+"';";
 
+        sql += "SELECT COUNT(tour_id) as nbCustomers FROM ticket WHERE ticket.tour_id='"+tourId+"';";
         // execute sql statements
         con.query(sql, callback);
     }

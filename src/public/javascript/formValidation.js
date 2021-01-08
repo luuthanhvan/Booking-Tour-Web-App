@@ -65,7 +65,7 @@ function validateBookingForm(){
         }
     }
 
-    if(nbCustomers.length != 0 && !nbCustomers.match(/^[0-9]$/)){
+    if(nbCustomers.length != 0 && !nbCustomers.match(/[0-9]$/)){
         document.getElementById("nbCustomersErr").innerHTML = "* Trường Số người đi cùng không được chứa chữ cái hoặc ký tự đặc biệt.";
         checked = true;
     }

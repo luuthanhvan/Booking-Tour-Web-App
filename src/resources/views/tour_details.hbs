@@ -40,10 +40,14 @@
                     <th scope="row">Giá tour: </th>
                     <td>{{this.tour_price}} đ</td>
                 </tr>
+                {{/each}}
+                <tr>
+                    <th scope="row">Số chỗ còn nhận: </th>
+                    <td>{{emptySeat}}</td>
+                </tr>
             </tbody>
         </table>
     </div>
-    {{/each}}
 </div>
 {{#each tourInfo}}
     <div>
@@ -59,13 +63,21 @@
             document.getElementById('tourDescription').innerHTML = htmlCode.body.outerText;
         </script>
     </div>
+{{/each}}
 
-    <button type="button" class="btn btn-info" id="btn-booking">Đặt ngay</button>
+<button type="button" class="btn btn-info" id="btn-booking">Đặt ngay</button>
 
-    <script>
-        // handling onclick event button
+<script>
+    // handling onclick event button
+    let nbSeats = parseInt('{{emptySeat}}');
+    // console.log(parseInt(nbSeats));
+    if(nbSeats == 0)
+        alert("Bạn không thể đặt tour này vì tour này đã hết chỗ. Nếu bạn vẫn muốn đặt tour này vui lòng liên hệ 0857333039.");
+    else{
+        {{#each tourInfo}}
         document.getElementById("btn-booking").onclick = function () {
             location.href = "/booking?tourId='{{this.tour_id}}'";
         };
-    </script>
-{{/each}}
+        {{/each}}
+    }
+</script>

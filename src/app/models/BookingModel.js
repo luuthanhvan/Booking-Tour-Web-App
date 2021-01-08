@@ -41,7 +41,7 @@ class BookingModel{
                 sql += "INSERT INTO customer (customer_name, customer_gender, customer_dob, booking_single_room)" +
                 " VALUES ('"+data.fullName[i]+"', '"+data.gender[i]+"', '"+dob+"', '"+data.singleRoom[i]+"');";
             }
-            sql += "INSERT INTO ticket (tour_id, customer_id, invoice_id) VALUES ('"+data.tourId+"', (SELECT MAX(customer_id) FROM customer LIMIT 1), (SELECT MAX(invoice_id) FROM invoice));";
+            sql += "INSERT INTO ticket (tour_id, customer_id, invoice_id) VALUES ('"+data.tourId+"', (SELECT MAX(customer_id) FROM customer), (SELECT MAX(invoice_id) FROM invoice));";
         }
 
         // execute sql statements

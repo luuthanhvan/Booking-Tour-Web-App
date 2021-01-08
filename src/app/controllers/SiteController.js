@@ -30,12 +30,15 @@ class SiteController{
             if(err) throw err;
             let tourInfo = results[0];
             let destInfo = results[1];
-
+            // console.log(results[2][0].nbCustomers);
+            let emptySeat = parseInt(tourInfo[0]['tour_max_customer']) - parseInt(results[2][0].nbCustomers);
+            if(emptySeat < 0)
+                emptySeat = 0;
             // format tour price and tour date go before send it to client
             tourInfo[0]['tour_price'] = helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_price']);
             tourInfo[0]['tour_date_go'] = helperFunctions.formatDateToDisplay(tourInfo[0]['tour_date_go']);
 
-            res.render('tour_details', {layout: 'user_base_page', title: tourInfo[0]['tour_name'], tourInfo, destInfo});
+            res.render('tour_details', {layout: 'user_base_page', title: tourInfo[0]['tour_name'], tourInfo, destInfo, emptySeat});
         });
     }
 

@@ -416,17 +416,18 @@ class ManageController{
                     if (err) throw err;
                     let tourBookingDetails = results[0].length == 0 ? [] : results[0];
                     let tourInfo = results[1].length == 0 ? [] : results[1];
-                    // console.log(tourInfo);
+                    let tourPrice = tourInfo[0]['tour_price'];
+                    let tourSurcharge = tourInfo[0]['tour_surcharge'];
 
                     // format date before send it to client
                     for(let i = 0; i < tourBookingDetails.length; i++){
                         tourBookingDetails[i]['customer_dob'] = helperFunctions.formatDateToDisplay(tourBookingDetails[i]['customer_dob']);
                         tourBookingDetails[i]['booking_date'] = helperFunctions.formatDateToDisplay(tourBookingDetails[i]['booking_date']);
 
-                        if(tourBookingDetails[i]['booking_single_room'] == 0)
-                            Object.assign(tourBookingDetails[i], {price: helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_price'])});
-                        else
-                            Object.assign(tourBookingDetails[i], {price: helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_price'] + tourInfo[0]['tour_surcharge'])});
+                        let year = parseInt(tourBookingDetails[i]['customer_dob'].substr(tourBookingDetails[i]['customer_dob'].lastIndexOf("/")+1, tourBookingDetails[i]['customer_dob'].length));
+                        let price = helperFunctions.calPrice(year, tourPrice, tourSurcharge, tourBookingDetails[i]['booking_single_room']);
+
+                        Object.assign(tourBookingDetails[i], {price: helperFunctions.formatPriceToDisplay(price)});
                     }
 
 

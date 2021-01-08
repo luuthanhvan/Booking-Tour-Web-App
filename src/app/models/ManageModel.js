@@ -18,7 +18,7 @@ class ManageModel{
         let sql = "SELECT DISTINCT dest_address from tourist_destination;";
 
         // sql statement to get dest_id and dest_name from tourist_destination table
-        sql += "SELECT dest_id, dest_name from tourist_destination;";
+        sql += "SELECT dest_id, dest_name, dest_address from tourist_destination;";
 
         // sql statement to get all tour information from tour table
         sql += "SELECT * FROM tour;";

@@ -27,12 +27,29 @@ function formatPriceToInsert(price){
     return priceFormatted;
 }
 
+function calPrice(year, tourPrice, tourSurcharge, isBookingSingleRoom){
+    let currentYear = new Date().getFullYear();
+    let result = 0;
+    let age = currentYear - year;
+
+    if(age >= 12)
+        result += tourPrice;
+    else if(age < 12 && age >= 5)
+        result += (tourPrice * (75/100));
+    else if(age < 5 && age >= 2)
+        result += (tourPrice * (50/100));
+    else if(age < 2 && age > 0)
+        result += (tourPrice * (25/100));
+
+    if(isBookingSingleRoom == 1)
+        result += tourSurcharge;
+
+    return result;
+}
+
 function calTotalPrice(data){
     let tourPrice = parseInt(data.tourPrice.split(".").join(""));
     let tourSurcharge = parseInt(data.tourSurcharge.split(".").join(""));
-
-    // console.log(tourPrice);
-    // console.log(tourSurcharge);
 
     let currentYear = new Date().getFullYear();
     let years = data.years;
@@ -42,19 +59,8 @@ function calTotalPrice(data){
     for(let i = 0; i < years.length; i++){
         let year = parseInt(years[i]);
         let room = parseInt(rooms[i]);
-        let age = currentYear - year;
 
-        if(age >= 12)
-            totalPrice += tourPrice;
-        else if(age < 12 && age >= 5)
-            totalPrice += (tourPrice * (75/100));
-        else if(age < 5 && age >= 2)
-            totalPrice += (tourPrice * (50/100));
-        else if(age < 2 && age > 0)
-            totalPrice += (tourPrice * (25/100));
-
-        if(room == 1)
-            totalPrice += tourSurcharge;
+        totalPrice += calPrice(year, tourPrice, tourSurcharge, room);
     }
 
     return totalPrice;
@@ -67,5 +73,6 @@ module.exports = {
     formatDateToInsert,
     formatPriceToDisplay,
     formatPriceToInsert,
+    calPrice,
     calTotalPrice,
 }

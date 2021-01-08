@@ -86,11 +86,14 @@ class BookingController{
     showBookingInfo(req, res){
         const con = req.con;
         let tourId = req.body.tourId;
+        let currentYear = new Date().getFullYear();
 
         bookingModel.getBookingInfoById(con, tourId, function(err, results){
             let mainCustomerInfo = results[0].length == 0 ? [] : results[0];
             let tourInfo = results[1].length == 0 ? [] : results[1];
             let bookingInfo = results[2].length == 0 ? [] : results[2];
+
+            // console.log(bookingInfo);
 
             // format date and time before send it to client
             let date = helperFunctions.formatDateToDisplay(bookingInfo[0]['booking_date']);
@@ -99,7 +102,8 @@ class BookingController{
 
             // format price before send it to client
             let totalPrice = helperFunctions.formatPriceToDisplay(bookingInfo[0]['unit_price']);
-            let tourPriceWithSurcharge = tourInfo[0]['tour_price'] + tourInfo[0]['tour_surcharge'];
+            let tourPrice = tourInfo[0]['tour_price'];
+            let tourSurcharge = tourInfo[0]['tour_surcharge'];
 
             mainCustomerInfo[0]['customer_dob'] = helperFunctions.formatDateToDisplay(mainCustomerInfo[0]['customer_dob']);
 
@@ -107,13 +111,11 @@ class BookingController{
                 // format customers dob to display
                 bookingInfo[i]['customer_dob'] = helperFunctions.formatDateToDisplay(bookingInfo[i]['customer_dob']);
 
+                let year = parseInt(bookingInfo[i]['customer_dob'].substr(bookingInfo[i]['customer_dob'].lastIndexOf("/")+1, bookingInfo[i]['customer_dob'].length));
+                let price = helperFunctions.calPrice(year, tourPrice, tourSurcharge, bookingInfo[i]['booking_single_room']);
+
                 // add ticket price for each customer
-                if(bookingInfo[i]['booking_single_room'] == 1){
-                    Object.assign(bookingInfo[i], {price: helperFunctions.formatPriceToDisplay(tourPriceWithSurcharge)});
-                }
-                else{
-                    Object.assign(bookingInfo[i], {price: helperFunctions.formatPriceToDisplay(tourInfo[0]['tour_price'])});
-                }
+                Object.assign(bookingInfo[i], {price: helperFunctions.formatPriceToDisplay(price)});
             }
 
             res.render('booking_details', {layout: 'user_base_page', title: 'Chi tiết đặt tour', mainCustomerInfo, bookingInfo, date, time, note, totalPrice, tourInfo});

@@ -37,16 +37,25 @@
             <div class="col">
                 <label>Số lượng khách tối đa</label>
                 <select class="custom-select" id="maxTourist" name="maxTourist">
-                    <option value="25">25 người</option>
-                    <option value="30">30 người</option>
                     <option value="35">35 người</option>
+                    <option value="30">30 người</option>
+                    <option value="25">25 người</option>
+                    <option value="20">20 người</option>
+                    <option value="15">15 người</option>
+                    <option value="10">10 người</option>
+                    <option value="5">5 người</option>
                 </select>
             </div>
             <div class="col">
                 <label>Số lượng khách tối thiểu</label>
                 <select class="custom-select" id="minTourist" name="minTourist">
-                    <option value="20">20 người</option>
+                    <option value="5">5 người</option>
+                    <option value="10">10 người</option>
                     <option value="15">15 người</option>
+                    <option value="20">20 người</option>
+                    <option value="25">25 người</option>
+                    <option value="30">30 người</option>
+                    <option value="35">35 người</option>
                 </select>
             </div>
             <div class="col">
@@ -100,7 +109,7 @@
                 <label>Địa điểm tham quan</label>
                 <select class="custom-select" id="touristDest" name="touristDest[]" multiple>
                     {{#each destInfo}}
-                        <option value="{{this.dest_id}}">{{this.dest_name}}</option>
+                        <option value="{{this.dest_id}}">{{this.dest_name}} - {{this.dest_address}}</option>
                     {{/each}}
                 </select>
                 <p id="touristDestErrorMessage" class="errorMessage"></p>
@@ -182,7 +191,7 @@
                 htmlTable += "</tr>";
             {{/each}}
         {{else}}
-            htmlTable += "<tr><td class='noData' colspan='14'>Không có dữ liệu</td></tr>";
+            htmlTable += "<tr><td class='noData' colspan='15'>Không có dữ liệu</td></tr>";
         {{/if}}
         htmlTable += "</tbody>";
         htmlTable += "</table>";
