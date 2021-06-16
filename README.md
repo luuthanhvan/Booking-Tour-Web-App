@@ -13,9 +13,9 @@
       sudo /opt/lampp/manager-linux-x64.run # open xampp
       ```   
       *Note: if the Apache server cannot started, fix
-            - Stop the apache service: `sudo /etc/init.d/apache2 stop`
-            - Start again: `sudo /opt/lampp/lampp start`
-            - Stop: `sudo /opt/lampp/lampp stop`
+      - Stop the apache service: `sudo /etc/init.d/apache2 stop`
+      - Start again: `sudo /opt/lampp/lampp start`
+      - Stop: `sudo /opt/lampp/lampp stop`
       
 4. Install a code editor such as Atom or VSCode
 
